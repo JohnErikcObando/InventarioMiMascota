@@ -1,0 +1,78 @@
+<form [formGroup]="formEmpresa" (ngSubmit)="save($event)">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Empresa</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-form-field appearance="fill">
+        <mat-label>Nit</mat-label>
+        <input formControlName="id" matInput placeholder="11111111" />
+
+        <mat-error *ngIf="nombre && nombre.hasError('required')">
+          El Nit Es <strong>Requerido</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Nombre</mat-label>
+        <input formControlName="nombre" matInput placeholder=" Empresa" />
+
+        <mat-error *ngIf="nombre && nombre.hasError('required')">
+          El Nombre Es <strong>Requerido</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Telefono</mat-label>
+        <input formControlName="telefono" matInput placeholder="555-555-1234" />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Celular</mat-label>
+        <input formControlName="celular" matInput placeholder="555-555-1234" />
+
+        <mat-error *ngIf="nombre && nombre.hasError('required')">
+          El Celular Es <strong>Requerido</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+        <mat-label>Email</mat-label>
+        <input
+          type="email"
+          matInput
+          formControlName="email"
+          placeholder="Ex. pat@example.com"
+        />
+        <mat-error
+          *ngIf="
+            email && email.hasError('email') && !email.hasError('required')
+          "
+        >
+          Ingresar un Email Valido
+        </mat-error>
+        <mat-error *ngIf="email && email.hasError('required')">
+          El email is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Direccion</mat-label>
+        <input
+          formControlName="direccion"
+          matInput
+          placeholder="Calle 123 # 1-1 "
+        />
+
+        <mat-error *ngIf="nombre && nombre.hasError('required')">
+          La Direccion Es <strong>Requerido</strong>
+        </mat-error>
+      </mat-form-field>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-raised-button color="primary" type="submit">Guardar</button>
+    </mat-card-actions>
+  </mat-card>
+</form>

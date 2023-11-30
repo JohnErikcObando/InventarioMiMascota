@@ -1,0 +1,14 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+form {
+  width: 95%;
+  margin: 2%;
+
+  mat-form-field {
+    width: 60%;
+  }
+}

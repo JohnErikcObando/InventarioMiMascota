@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      - POSTGRES_DB=InventarioDB
+      - POSTGRES_USER=MiMascota
+      - POSTGRES_PASSWORD=M1m45c0t4
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=distri.mimascota@gmail.con
+      - PGADMIN_DEFAULT_PASSWORD=M1m45c0t4
+    ports:
+      - 5050:80
