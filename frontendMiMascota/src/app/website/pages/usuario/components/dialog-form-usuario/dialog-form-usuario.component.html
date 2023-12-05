@@ -1,1 +1,112 @@
-<p>dialog-form-usuario works!</p>
+<div class="modal-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Usuario</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content class="card-content-container">
+      <form [formGroup]="formUsuario" (ngSubmit)="create()" class="mobile-form">
+        <div class="form-row">
+          <mat-form-field class="half-width">
+            <mat-label>Usuario</mat-label>
+            <input matInput formControlName="usuario" />
+            <mat-error *ngIf="formUsuario.get('usuario')?.hasError('required')"
+              >Campo requerido</mat-error
+            >
+          </mat-form-field>
+
+          <mat-form-field class="half-width">
+            <mat-label>Password</mat-label>
+            <input
+              matInput
+              formControlName="password"
+              [type]="hide ? 'password' : 'text'"
+            />
+            <button
+              mat-icon-button
+              matSuffix
+              (click)="hide = !hide"
+              [attr.aria-label]="'Hide password'"
+              [attr.aria-pressed]="hide"
+            >
+              <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+            </button>
+            <mat-error *ngIf="formUsuario.get('password')?.hasError('required')"
+              >Campo requerido</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field class="half-width">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="nombre" (blur)="ajustarTexto()" />
+            <mat-error *ngIf="formUsuario.get('nombre')?.hasError('required')"
+              >Campo requerido</mat-error
+            >
+          </mat-form-field>
+
+          <mat-form-field class="half-width">
+            <mat-label>Apellido</mat-label>
+            <input
+              matInput
+              formControlName="apellido"
+              (blur)="ajustarTexto()"
+            />
+            <mat-error *ngIf="formUsuario.get('apellido')?.hasError('required')"
+              >Campo requerido</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field class="full-width">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" />
+            <mat-error
+              *ngIf="
+                formUsuario.get('email')?.hasError('required') &&
+                !formUsuario.get('email')?.value
+              "
+            >
+              Campo requerido
+            </mat-error>
+            <mat-error
+              *ngIf="
+                formUsuario.get('email')?.hasError('email') ||
+                formUsuario.get('email')?.hasError('customEmailFormat')
+              "
+            >
+              Email no válido
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field class="half-width">
+            <mat-label>Rol de Usuario</mat-label>
+            <input matInput formControlName="rolUsuario" />
+            <mat-error
+              *ngIf="formUsuario.get('rolUsuario')?.hasError('required')"
+              >Campo requerido</mat-error
+            >
+          </mat-form-field>
+
+          <mat-form-field class="half-width">
+            <mat-label>Activo</mat-label>
+            <input matInput formControlName="activo" />
+            <mat-error *ngIf="formUsuario.get('activo')?.hasError('required')"
+              >Campo requerido</mat-error
+            >
+          </mat-form-field>
+        </div>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions class="button-container">
+      <button mat-button type="submit" [disabled]="formUsuario.invalid">
+        Guardar
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

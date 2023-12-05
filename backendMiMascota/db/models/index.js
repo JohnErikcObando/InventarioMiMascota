@@ -47,7 +47,6 @@ function setupModels(sequelize) {
 
   Usuario.associate(sequelize.models);
   RolUsuario.associate(sequelize.models);
-  Historial.associate(sequelize.models);
   Menu.associate(sequelize.models);
   MenuRol.associate(sequelize.models);
   Marca.associate(sequelize.models);

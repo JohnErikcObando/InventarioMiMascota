@@ -9,10 +9,10 @@ const HistorialSchema = {
     primaryKey: true,
     type: DataTypes.INTEGER,
   },
-  usuario: {
+  usuarioModif: {
     allowNull: false,
     type: DataTypes.STRING,
-    field: 'usuario',
+    field: 'usuario_modif',
     defaultValue: '',
   },
   campo: {

@@ -12,20 +12,14 @@ class UsuarioService {
 
   async find() {
     const usuarios = await models.Usuario.findAll({
-      include: [
-        { model: models.RolUsuario, as: 'rol_usuario' },
-        { model: models.Historial, as: 'historial' },
-      ],
+      // include: [{ model: models.RolUsuario, as: 'rol_usuario' }],
     });
     return usuarios;
   }
 
   async findOne(id) {
     const usuario = await models.Usuario.findByPk(id, {
-      include: [
-        { model: models.RolUsuario, as: 'rol_usuario' },
-        { model: models.Historial, as: 'historial' },
-      ],
+      include: [{ model: models.RolUsuario, as: 'rol_usuario' }],
     });
     if (!usuario) {
       throw boom.notFound('Usuario not found');
