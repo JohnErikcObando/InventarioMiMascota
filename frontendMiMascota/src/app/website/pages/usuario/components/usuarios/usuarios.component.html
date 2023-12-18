@@ -41,7 +41,9 @@
         <!-- activo Column -->
         <ng-container matColumnDef="activo">
           <th mat-header-cell *matHeaderCellDef>Activo</th>
-          <td mat-cell *matCellDef="let element">{{ element.activo }}</td>
+          <td mat-cell *matCellDef="let element">
+            {{ element.activo ? "Activo" : "Inactivo" }}
+          </td>
         </ng-container>
 
         <!-- accion Column -->
@@ -49,11 +51,19 @@
           <th mat-header-cell *matHeaderCellDef>Accion</th>
           <td mat-cell *matCellDef="let element">
             <section>
-              <button mat-icon-button color="primary" (click)="editUsuario()">
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="editUsuario(element.id)"
+              >
                 <mat-icon>edit</mat-icon>
               </button>
 
-              <button mat-icon-button color="warn" (click)="deleteUsuario()">
+              <button
+                mat-icon-button
+                color="warn"
+                (click)="deleteUsuario(element.id)"
+              >
                 <mat-icon>delete</mat-icon>
               </button>
             </section>

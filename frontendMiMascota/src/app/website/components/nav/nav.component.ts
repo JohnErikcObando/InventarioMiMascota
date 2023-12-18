@@ -34,7 +34,6 @@ export class NavComponent {
     this.menuservice.getListaMenu().subscribe({
       next: (rta) => {
         this.listaMenus = rta;
-        console.log('menu', this.listaMenus);
       },
       error: (e) => {
         console.error('Error al obtener los datos:', e);

@@ -1,11 +1,20 @@
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
+// Models
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
+import { RolUsuarioModel } from '../../../../../core/models/rol-usuario.model';
+
+// Services
 import { UsuarioService } from 'src/app/core/services/usuario.service';
 import { AjustarTextoService } from 'src/app/shared/services/ajustar-texto.service';
+import { RolUsuarioService } from 'src/app/core/services/rol-usuario.service';
+
+import { Sweetalert2Service } from 'src/app/core/services/sweetalert2.service';
 import { ValidatorsService } from 'src/app/shared/services/validators.service';
+import { MyValidators } from '../../../../../utils/my-validators';
 
 @Component({
   selector: 'app-dialog-form-usuario',
@@ -18,46 +27,104 @@ export class DialogFormUsuarioComponent {
   tituloAccion: string = 'Agregar';
   botonAccion: String = 'Guardar';
 
+  rolUsuarios: RolUsuarioModel[] = [];
+
   hide = true;
+  username: string = '';
 
   constructor(
     private formBuilder: FormBuilder,
+    private router: Router,
     public dialogRef: MatDialogRef<DialogFormUsuarioComponent>,
-    @Inject(MAT_DIALOG_DATA) public dataUsuario: UsuarioModel,
+    private route: ActivatedRoute,
+    @Inject(MAT_DIALOG_DATA) public idUsuario: number,
     private ajustarTextoService: AjustarTextoService,
     private usuarioService: UsuarioService,
-    private validatorsService: ValidatorsService
+    private validatorsService: ValidatorsService,
+    private rolUsuarioService: RolUsuarioService,
+    private sweetalert2Service: Sweetalert2Service
   ) {
     this.formUsuario = new FormGroup({});
     this.buildForm();
   }
 
   ngOnInit(): void {
-    this.usuarioModal();
+    this.getAllRolUsuario();
+    this.opcionesUsuario();
   }
 
-  usuarioModal() {
-    if (this.dataUsuario != null) {
-      this.formUsuario.patchValue({
-        rolUsuario: this.dataUsuario.rolUsuarioId,
-        usuario: this.dataUsuario.usuario,
-        password: this.dataUsuario.password,
-        nombre: this.dataUsuario.nombre,
-        apelllido: this.dataUsuario.apellido,
-        email: this.dataUsuario.email,
-        activo: this.dataUsuario.activo,
-        usuarioModif: this.dataUsuario.usuarioModif,
-      });
+  opcionesUsuario() {
+    if (this.idUsuario != null) {
+      this.get(this.idUsuario);
     }
   }
 
-  create() {}
+  cerrarDialog() {
+    this.dialogRef.close();
+  }
 
-  edit() {}
+  save(event: MouseEvent) {
+    if (this.botonAccion === 'Guardar') {
+      this.create();
+    } else {
+      this.botonAccion === 'Editar';
+      this.update();
+    }
+  }
 
-  update() {}
+  create() {
+    const data = this.formUsuario.value;
+    this.usuarioService.create(data).subscribe((rta) => {
+      this.sweetalert2Service.swalSuccess(
+        'El usuario se registró correctamente'
+      );
+      this.dialogRef.close();
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    });
+  }
+
+  get(idusuario: number) {
+    this.usuarioService.get(idusuario).subscribe({
+      next: (data) => {
+        this.formUsuario.patchValue(data);
+        this.botonAccion = 'Editar';
+        this.username = data.usuario;
+        console.log('username', this.username);
+
+        MyValidators.setUsername(this.username);
+
+        // Verificar el valor de activo y asignarlo al formulario
+        const activoControl = this.formUsuario.get('activo');
+        if (activoControl && data.activo !== null) {
+          activoControl.setValue(data.activo ? 'true' : 'false');
+        }
+      },
+      error: (errorMsg) => {
+        window.alert(errorMsg);
+      },
+    });
+  }
+
+  update() {
+    const data = this.formUsuario.value;
+    this.usuarioService.update(this.idUsuario, data).subscribe((rta) => {
+      this.sweetalert2Service.swalSuccess('El usuario se edito correctamente');
+      this.dialogRef.close();
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    });
+  }
 
   delete() {}
+
+  private getAllRolUsuario() {
+    this.rolUsuarioService.getAll().subscribe((data) => {
+      this.rolUsuarios = data;
+    });
+  }
 
   ajustarTexto(): void {
     const nombreControl = this.formUsuario.get('nombre');
@@ -82,8 +149,12 @@ export class DialogFormUsuarioComponent {
 
   private buildForm() {
     this.formUsuario = this.formBuilder.group({
-      rolUsuario: ['', Validators.required],
-      usuario: ['', Validators.required],
+      rolUsuarioId: ['', Validators.required],
+      usuario: [
+        '',
+        [Validators.required, Validators.minLength(4)],
+        MyValidators.ValidarUsername(this.usuarioService),
+      ],
       password: ['', Validators.required],
       nombre: ['', Validators.required],
       apellido: ['', Validators.required],
@@ -101,8 +172,8 @@ export class DialogFormUsuarioComponent {
     });
   }
 
-  get rolUsuario() {
-    return this.formUsuario.get('rolUsuario');
+  get rolUsuarioId() {
+    return this.formUsuario.get('rolUsuarioId');
   }
 
   get usuario() {

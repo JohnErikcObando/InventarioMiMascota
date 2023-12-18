@@ -6,6 +6,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { UsuarioService } from '../../../../../core/services/usuario.service';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { DialogFormUsuarioComponent } from '../dialog-form-usuario/dialog-form-usuario.component';
+import { Sweetalert2Service } from 'src/app/core/services/sweetalert2.service';
+import { MyValidators } from 'src/app/utils/my-validators';
 
 @Component({
   selector: 'app-usuarios',
@@ -28,7 +30,8 @@ export class UsuariosComponent {
 
   constructor(
     private dialog: MatDialog,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private sweetalert2Service: Sweetalert2Service
   ) {}
 
   ngOnInit(): void {
@@ -43,14 +46,62 @@ export class UsuariosComponent {
     });
   }
 
-  getUsuario() {}
+  getUsuario(id: number) {
+    this.usuarioService.get(id).subscribe((data) => {
+      this.usuario = [data];
+    });
+  }
 
   createUsuario() {
+    MyValidators.setEstado('Guardar');
+    this.dialogUsuario();
+  }
+
+  editUsuario(id: string) {
+    MyValidators.setEstado('Editar');
+    this.dialogUsuario(id);
+  }
+
+  deleteUsuario(id: number) {
+    // Obtener el usuario antes de la eliminación
+    this.getUsuario(id);
+
+    const confirmationMessage =
+      'De Eliminar el Usuario!  ' + this.usuario[0].usuario;
+
+    this.sweetalert2Service.swalConfirm(confirmationMessage).then((result) => {
+      if (result.isConfirmed) {
+        // Concatenar el usuario actual con información adicional
+        const usuarioConcatenado = 'Mi mascota2'; //`${this.usuario[0].usuario} - Eliminado`;
+
+        // Actualizar el usuario antes de la eliminación
+        this.usuarioService
+          .patch(this.usuario[0].id, { usuarioModif: usuarioConcatenado })
+          .subscribe(() => {
+            // Eliminar el usuario después de actualizar
+            this.usuarioService.delete(this.usuario[0].id).subscribe(() => {
+              this.sweetalert2Service.swalSuccess(
+                'Usuario Eliminado Correctamente'
+              );
+              setTimeout(() => {
+                this.getAllUsuario();
+              }, 1500);
+            });
+          });
+      }
+    });
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  dialogUsuario(id?: string) {
     const dialogRef = this.dialog
       .open(DialogFormUsuarioComponent, {
         disableClose: true,
-        height: '510px',
-        width: '500px', // Usa disableClose en lugar de disable
+        data: id || null,
       })
       .afterClosed()
       .subscribe((resultado) => {
@@ -58,14 +109,5 @@ export class UsuariosComponent {
           this.getAllUsuario();
         }
       });
-  }
-
-  editUsuario() {}
-
-  deleteUsuario() {}
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }

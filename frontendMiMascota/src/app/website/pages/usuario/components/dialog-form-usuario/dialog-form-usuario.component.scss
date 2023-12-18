@@ -4,7 +4,7 @@
 }
 
 .card-content-container {
-  max-height: 400px; /* Ajusta la altura máxima según sea necesario */
+  max-height: 500px; /* Ajusta la altura máxima según sea necesario */
   overflow-y: auto;
 }
 
@@ -35,6 +35,15 @@
   margin-top: 16px;
   padding: 16px;
   box-shadow: 0px -5px 5px -5px rgba(0, 0, 0, 0.2); /* Agrega sombra debajo del contenedor de botones */
+}
+
+.button-row {
+  margin: 8px 8px 8px 0;
+}
+
+.button-row {
+  display: table-cell;
+  max-width: 600px;
 }
 
 .mat-card {
