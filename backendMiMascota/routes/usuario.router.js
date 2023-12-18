@@ -7,6 +7,7 @@ const {
   CreateUsuarioSchema,
   UpdateUsuarioSchema,
   GetUsuarioSchema,
+  UpdateUsuarioModifSchema,
 } = require('../Schemas/usuario.schema');
 
 const router = express.Router();
@@ -15,6 +16,23 @@ const service = new UsuarioService();
 router.get('/', async (req, res, next) => {
   try {
     const usuarios = await service.find();
+    res.json(usuarios);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/byUsuario', async (req, res, next) => {
+  try {
+    const { usuario } = req.query;
+
+    if (!usuario) {
+      return res
+        .status(400)
+        .json({ error: 'Parámetro de consulta "usuario" requerido' });
+    }
+
+    const usuarios = await service.findByUsername(usuario);
     res.json(usuarios);
   } catch (error) {
     next(error);
@@ -65,6 +83,22 @@ router.put(
   },
 );
 
+router.patch(
+  '/:id/usuariomodif',
+  validatorHandler(GetUsuarioSchema, 'params'),
+  validatorHandler(UpdateUsuarioModifSchema, 'body'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const body = req.body;
+      const usuario = await service.update(id, body);
+      res.json(usuario);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
 router.delete(
   '/:id',
   validatorHandler(GetUsuarioSchema, 'params'),
@@ -78,6 +112,22 @@ router.delete(
     }
   },
 );
+
+router.get('/by-username/:username', async (req, res, next) => {
+  try {
+    const { username } = req.params;
+    const usuario = await service.findByUsername(username);
+
+    // Devolver un resultado vacío si el usuario no existe
+    if (!usuario) {
+      return res.json(null);
+    }
+
+    res.json(usuario);
+  } catch (error) {
+    next(error);
+  }
+});
 
 // Middleware de manejo de errores
 router.use((err, req, res, next) => {

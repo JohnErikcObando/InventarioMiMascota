@@ -35,8 +35,17 @@ const UpdateUsuarioSchema = Joi.object({
   usuarioModif,
 });
 
+const UpdateUsuarioModifSchema = Joi.object({
+  usuarioModif,
+});
+
 const GetUsuarioSchema = Joi.object({
   id: id.required(),
 });
 
-module.exports = { CreateUsuarioSchema, UpdateUsuarioSchema, GetUsuarioSchema };
+module.exports = {
+  CreateUsuarioSchema,
+  UpdateUsuarioSchema,
+  GetUsuarioSchema,
+  UpdateUsuarioModifSchema,
+};

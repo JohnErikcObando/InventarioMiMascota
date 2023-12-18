@@ -1,6 +1,7 @@
 const boom = require('@hapi/boom');
 
 const { models } = require('./../libs/sequelize');
+const { Sequelize } = require('sequelize');
 
 class UsuarioService {
   constructor() {}
@@ -37,6 +38,22 @@ class UsuarioService {
     const usuario = await this.findOne(id);
     await usuario.destroy();
     return { id };
+  }
+
+  async findByUsername(username) {
+    const usuarios = await models.Usuario.findAll({
+      where: {
+        usuario: {
+          [Sequelize.Op.iLike]: username,
+        },
+      },
+    });
+
+    if (!usuarios || usuarios.length === 0) {
+      throw boom.notFound('Usuarios not found');
+    }
+
+    return usuarios;
   }
 }
 
