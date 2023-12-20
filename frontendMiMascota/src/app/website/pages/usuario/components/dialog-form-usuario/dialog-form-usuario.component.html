@@ -9,7 +9,11 @@
         <div class="form-row">
           <mat-form-field class="half-width">
             <mat-label>Usuario</mat-label>
-            <input matInput formControlName="usuario" />
+            <input
+              matInput
+              formControlName="usuario"
+              [value]="usuario?.value | ajustarTexto | removeSpaces"
+            />
             <mat-error *ngIf="formUsuario.get('usuario')?.hasError('required')"
               >Campo requerido</mat-error
             >
@@ -47,7 +51,11 @@
         <div class="form-row">
           <mat-form-field class="half-width">
             <mat-label>Nombre</mat-label>
-            <input matInput formControlName="nombre" (blur)="ajustarTexto()" />
+            <input
+              matInput
+              formControlName="nombre"
+              [value]="nombre?.value | ajustarTexto"
+            />
             <mat-error *ngIf="formUsuario.get('nombre')?.hasError('required')"
               >Campo requerido</mat-error
             >
@@ -58,7 +66,7 @@
             <input
               matInput
               formControlName="apellido"
-              (blur)="ajustarTexto()"
+              [value]="apellido?.value | ajustarTexto"
             />
             <mat-error *ngIf="formUsuario.get('apellido')?.hasError('required')"
               >Campo requerido</mat-error

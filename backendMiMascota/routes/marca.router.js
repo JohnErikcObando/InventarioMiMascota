@@ -7,6 +7,7 @@ const {
   CreateMarcaSchema,
   UpdateMarcaSchema,
   GetMarcaSchema,
+  UpdateMarcaModifSchema,
 } = require('../Schemas/marca.schema');
 
 const router = express.Router();
@@ -15,6 +16,23 @@ const service = new MarcaService();
 router.get('/', async (req, res, next) => {
   try {
     const marcas = await service.find();
+    res.json(marcas);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/byMarca', async (req, res, next) => {
+  try {
+    const { nombre } = req.query;
+
+    if (!nombre) {
+      return res
+        .status(400)
+        .json({ error: 'Parámetro de consulta "marca" requerido' });
+    }
+
+    const marcas = await service.findByName(nombre);
     res.json(marcas);
   } catch (error) {
     next(error);
@@ -59,6 +77,22 @@ router.put(
       const body = req.body;
       const marca = await service.update(id, body);
       res.json(marca);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+router.patch(
+  '/:id/usuariomodif',
+  validatorHandler(GetMarcaSchema, 'params'),
+  validatorHandler(UpdateMarcaModifSchema, 'body'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const body = req.body;
+      const usuario = await service.update(id, body);
+      res.json(usuario);
     } catch (error) {
       next(error);
     }

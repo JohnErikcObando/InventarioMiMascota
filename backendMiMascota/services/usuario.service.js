@@ -41,10 +41,11 @@ class UsuarioService {
   }
 
   async findByUsername(username) {
+    const trimUsuario = username.trim();
     const usuarios = await models.Usuario.findAll({
       where: {
         usuario: {
-          [Sequelize.Op.iLike]: username,
+          [Sequelize.Op.iLike]: trimUsuario,
         },
       },
     });

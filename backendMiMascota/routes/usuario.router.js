@@ -53,6 +53,7 @@ router.get(
   },
 );
 
+
 router.post(
   '/',
   validatorHandler(CreateUsuarioSchema, 'body'),
@@ -113,21 +114,7 @@ router.delete(
   },
 );
 
-router.get('/by-username/:username', async (req, res, next) => {
-  try {
-    const { username } = req.params;
-    const usuario = await service.findByUsername(username);
 
-    // Devolver un resultado vacío si el usuario no existe
-    if (!usuario) {
-      return res.json(null);
-    }
-
-    res.json(usuario);
-  } catch (error) {
-    next(error);
-  }
-});
 
 // Middleware de manejo de errores
 router.use((err, req, res, next) => {

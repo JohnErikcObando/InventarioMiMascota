@@ -12,9 +12,10 @@ import { UsuarioService } from 'src/app/core/services/usuario.service';
 import { AjustarTextoService } from 'src/app/shared/services/ajustar-texto.service';
 import { RolUsuarioService } from 'src/app/core/services/rol-usuario.service';
 
-import { Sweetalert2Service } from 'src/app/core/services/sweetalert2.service';
 import { ValidatorsService } from 'src/app/shared/services/validators.service';
 import { MyValidators } from '../../../../../utils/my-validators';
+
+import { Sweetalert2Service } from 'src/app/shared/services/sweetalert2.service';
 
 @Component({
   selector: 'app-dialog-form-usuario',
@@ -38,7 +39,6 @@ export class DialogFormUsuarioComponent {
     public dialogRef: MatDialogRef<DialogFormUsuarioComponent>,
     private route: ActivatedRoute,
     @Inject(MAT_DIALOG_DATA) public idUsuario: number,
-    private ajustarTextoService: AjustarTextoService,
     private usuarioService: UsuarioService,
     private validatorsService: ValidatorsService,
     private rolUsuarioService: RolUsuarioService,
@@ -93,7 +93,7 @@ export class DialogFormUsuarioComponent {
         this.username = data.usuario;
         console.log('username', this.username);
 
-        MyValidators.setUsername(this.username);
+        MyValidators.setCampo(this.username);
 
         // Verificar el valor de activo y asignarlo al formulario
         const activoControl = this.formUsuario.get('activo');
@@ -118,33 +118,10 @@ export class DialogFormUsuarioComponent {
     });
   }
 
-  delete() {}
-
   private getAllRolUsuario() {
     this.rolUsuarioService.getAll().subscribe((data) => {
       this.rolUsuarios = data;
     });
-  }
-
-  ajustarTexto(): void {
-    const nombreControl = this.formUsuario.get('nombre');
-    const apellidoControl = this.formUsuario.get('apellido');
-
-    if (nombreControl && nombreControl.value) {
-      const nombreAjustado = this.ajustarTextoService.ajustarTexto(
-        nombreControl.value,
-        false
-      );
-      nombreControl.setValue(nombreAjustado);
-    }
-
-    if (apellidoControl && apellidoControl.value) {
-      const apellidoAjustado = this.ajustarTextoService.ajustarTexto(
-        apellidoControl.value,
-        true
-      );
-      apellidoControl.setValue(apellidoAjustado);
-    }
   }
 
   private buildForm() {

@@ -10,6 +10,7 @@ export class AjustarTextoPipe implements PipeTransform {
       return value;
     }
 
+    // Dividir las palabras y capitalizar la primera letra de cada palabra
     return value
       .split(' ')
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))

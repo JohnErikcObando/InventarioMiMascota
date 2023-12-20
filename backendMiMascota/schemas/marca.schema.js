@@ -21,8 +21,13 @@ const GetMarcaSchema = Joi.object({
   id: id.required(),
 });
 
+const UpdateMarcaModifSchema = Joi.object({
+  id: id.required(),
+});
+
 module.exports = {
   CreateMarcaSchema,
   UpdateMarcaSchema,
   GetMarcaSchema,
+  UpdateMarcaModifSchema,
 };

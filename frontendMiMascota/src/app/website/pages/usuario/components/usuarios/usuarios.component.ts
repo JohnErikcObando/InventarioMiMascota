@@ -4,9 +4,11 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 
 import { UsuarioService } from '../../../../../core/services/usuario.service';
+
+import { Sweetalert2Service } from 'src/app/shared/services/sweetalert2.service';
+
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { DialogFormUsuarioComponent } from '../dialog-form-usuario/dialog-form-usuario.component';
-import { Sweetalert2Service } from 'src/app/core/services/sweetalert2.service';
 import { MyValidators } from 'src/app/utils/my-validators';
 
 @Component({
