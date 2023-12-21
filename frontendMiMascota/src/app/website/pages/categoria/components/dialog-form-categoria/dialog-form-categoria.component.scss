@@ -1,0 +1,41 @@
+.mobile-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  // height: 100vh;
+}
+
+.modal-container {
+  max-width: 400px;
+  width: 400%;
+}
+
+.dialog {
+  box-sizing: border-box;
+  background-color: white;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  margin-top: 0;
+}
+
+.form-content {
+  margin-bottom: 16px;
+}
+
+.form-row {
+  margin-bottom: 16px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.button-row {
+  flex: 1;
+  margin-right: 8px;
+}

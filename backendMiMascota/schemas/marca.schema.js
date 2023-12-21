@@ -22,7 +22,7 @@ const GetMarcaSchema = Joi.object({
 });
 
 const UpdateMarcaModifSchema = Joi.object({
-  id: id.required(),
+  usuarioModif,
 });
 
 module.exports = {

@@ -5,6 +5,7 @@ const {
   CreateCategoriaSchema,
   UpdateCategoriaSchema,
   GetCategoriaSchema,
+  UpdateCategoriaModifSchema,
 } = require('./../schemas/categoria.schema');
 const boom = require('@hapi/boom');
 
@@ -14,6 +15,23 @@ const service = new CategoriaService();
 router.get('/', async (req, res, next) => {
   try {
     const categorias = await service.find();
+    res.json(categorias);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/byCategoria', async (req, res, next) => {
+  try {
+    const { nombre } = req.query;
+
+    if (!nombre) {
+      return res
+        .status(400)
+        .json({ error: 'Parámetro de consulta "usuario" requerido' });
+    }
+
+    const categorias = await service.findByName(nombre);
     res.json(categorias);
   } catch (error) {
     next(error);
@@ -64,6 +82,22 @@ router.put(
   },
 );
 
+router.patch(
+  '/:id/usuariomodif',
+  validatorHandler(GetCategoriaSchema, 'params'),
+  validatorHandler(UpdateCategoriaModifSchema, 'body'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const body = req.body;
+      const usuario = await service.update(id, body);
+      res.json(usuario);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
 router.delete(
   '/:id',
   validatorHandler(GetCategoriaSchema, 'params'),
@@ -73,9 +107,10 @@ router.delete(
       await service.delete(id);
       res.status(201).json({ id });
     } catch (error) {
-      next(error);0
+      next(error);
+      0;
     }
-  }
+  },
 );
 
 // Middleware de manejo de errores

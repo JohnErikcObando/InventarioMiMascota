@@ -1,3 +1,4 @@
+import { CategoriaModule } from './categoria/categoria.module';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from '../components/layout/layout.component';
@@ -31,6 +32,11 @@ const routes: Routes = [
         path: 'marca',
         loadChildren: () =>
           import('./marca/marca.module').then((m) => MarcaModule),
+      },
+      {
+        path: 'categoria',
+        loadChildren: () =>
+          import('./categoria/categoria.module').then((m) => CategoriaModule),
       },
     ],
   },

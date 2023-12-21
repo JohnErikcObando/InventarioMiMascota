@@ -21,8 +21,13 @@ const GetCategoriaSchema = Joi.object({
   id: id.required(),
 });
 
+const UpdateCategoriaModifSchema = Joi.object({
+  usuarioModif,
+});
+
 module.exports = {
   CreateCategoriaSchema,
   UpdateCategoriaSchema,
   GetCategoriaSchema,
+  UpdateCategoriaModifSchema,
 };

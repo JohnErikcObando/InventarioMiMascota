@@ -2,6 +2,8 @@ const boom = require('@hapi/boom');
 const { models } = require('../libs/sequelize');
 const { ValidationError, UniqueConstraintError } = require('sequelize');
 
+const { Sequelize } = require('sequelize');
+
 class CategoriaService {
   constructor() {}
 
@@ -30,6 +32,22 @@ class CategoriaService {
     if (!categoria) {
       throw boom.notFound('Categoria not found');
     }
+    return categoria;
+  }
+
+  async findByName(nombre) {
+    const categoria = await models.Categoria.findAll({
+      where: {
+        nombre: {
+          [Sequelize.Op.iLike]: nombre,
+        },
+      },
+    });
+
+    if (!categoria || categoria.length === 0) {
+      throw boom.notFound('Categoria not found');
+    }
+
     return categoria;
   }
 
