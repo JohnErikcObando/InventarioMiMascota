@@ -1,11 +1,13 @@
 import { AbstractControl } from '@angular/forms';
-import { UsuarioService } from '../core/services/usuario.service';
 import { Observable, of } from 'rxjs';
 import { catchError, map, delay } from 'rxjs/operators';
+
 import { UsuarioModel } from '../core/models/usuario.model';
 import { MarcaService } from '../core/services/marca.service';
 import { CategoriaService } from '../core/services/categoria.service';
 import { CajaService } from '../core/services/caja.service';
+import { FormaPagoService } from './../core/services/forma-pago.service';
+import { UsuarioService } from '../core/services/usuario.service';
 
 export class MyValidators {
   static estado: string;

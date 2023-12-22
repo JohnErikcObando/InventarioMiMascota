@@ -1,7 +1,12 @@
 const express = require('express');
 const FormaPagoService = require('./../services/formaPago.service');
 const validatorHandler = require('./../middlewares/validator.handler');
-const { CreateFormaPagoSchema, UpdateFormaPagoSchema, GetFormaPagoSchema } = require('./../Schemas/formaPago.schema');
+const {
+  CreateFormaPagoSchema,
+  UpdateFormaPagoSchema,
+  GetFormaPagoSchema,
+  UpdateFormaPagoModifSchema,
+} = require('./../Schemas/formaPago.schema');
 
 const router = express.Router();
 const service = new FormaPagoService();
@@ -15,7 +20,25 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.get('/:id',
+router.get('/byFormaPago', async (req, res, next) => {
+  try {
+    const { nombre } = req.query;
+
+    if (!nombre) {
+      return res
+        .status(400)
+        .json({ error: 'Parámetro de consulta "usuario" requerido' });
+    }
+
+    const categorias = await service.findByName(nombre);
+    res.json(categorias);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get(
+  '/:id',
   validatorHandler(GetFormaPagoSchema, 'params'),
   async (req, res, next) => {
     try {
@@ -25,7 +48,7 @@ router.get('/:id',
     } catch (error) {
       next(error);
     }
-  }
+  },
 );
 
 router.post(
@@ -52,6 +75,22 @@ router.put(
       const body = req.body;
       const formaPago = await service.update(id, body);
       res.json(formaPago);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+router.patch(
+  '/:id/usuariomodif',
+  validatorHandler(GetFormaPagoSchema, 'params'),
+  validatorHandler(UpdateFormaPagoModifSchema, 'body'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const body = req.body;
+      const usuario = await service.update(id, body);
+      res.json(usuario);
     } catch (error) {
       next(error);
     }

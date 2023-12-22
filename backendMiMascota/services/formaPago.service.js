@@ -1,6 +1,7 @@
 const boom = require('@hapi/boom');
 
 const { models } = require('./../libs/sequelize');
+const { Sequelize } = require('sequelize');
 
 class FormaPagoService {
   constructor() {}
@@ -20,6 +21,22 @@ class FormaPagoService {
     if (!formaPago) {
       throw boom.notFound('FormaPago not found');
     }
+    return formaPago;
+  }
+
+  async findByName(nombre) {
+    const formaPago = await models.FormaPago.findAll({
+      where: {
+        nombre: {
+          [Sequelize.Op.iLike]: nombre,
+        },
+      },
+    });
+
+    if (!formaPago || formaPago.length === 0) {
+      throw boom.notFound('FormaPago not found');
+    }
+
     return formaPago;
   }
 

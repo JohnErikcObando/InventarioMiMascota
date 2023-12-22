@@ -18,8 +18,13 @@ const GetFormaPagoSchema = Joi.object({
   id: id.required(),
 });
 
+const UpdateFormaPagoModifSchema = Joi.object({
+  usuarioModif,
+});
+
 module.exports = {
   CreateFormaPagoSchema,
   UpdateFormaPagoSchema,
   GetFormaPagoSchema,
+  UpdateFormaPagoModifSchema,
 };
