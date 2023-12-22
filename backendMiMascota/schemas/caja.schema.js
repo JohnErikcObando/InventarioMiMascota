@@ -27,4 +27,13 @@ const GetCajaSchema = Joi.object({
   id,
 });
 
-module.exports = { CreateCajaSchema, UpdateCajaSchema, GetCajaSchema };
+const UpdateCajaModifSchema = Joi.object({
+  usuarioModif,
+});
+
+module.exports = {
+  CreateCajaSchema,
+  UpdateCajaSchema,
+  GetCajaSchema,
+  UpdateCajaModifSchema,
+};

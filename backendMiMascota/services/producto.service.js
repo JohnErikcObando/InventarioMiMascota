@@ -1,6 +1,7 @@
 const boom = require('@hapi/boom');
 
 const { models } = require('./../libs/sequelize');
+const { Sequelize } = require('sequelize');
 
 class ProductoService {
   constructor() {}
@@ -31,6 +32,22 @@ class ProductoService {
       throw boom.notFound('Producto not found');
     }
     return producto;
+  }
+
+  async findByName(nombre) {
+    const productos = await models.Marca.findAll({
+      where: {
+        nombre: {
+          [Sequelize.Op.iLike]: nombre,
+        },
+      },
+    });
+
+    if (!productos || productos.length === 0) {
+      throw boom.notFound('Marca not found');
+    }
+
+    return productos;
   }
 
   async update(id, changes) {

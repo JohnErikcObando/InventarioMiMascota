@@ -7,6 +7,7 @@ const {
   CreateProductoSchema,
   UpdateProductoSchema,
   GetProductoSchema,
+  UpdateProductoModifSchema,
 } = require('../schemas/producto.schema');
 
 const router = express.Router();
@@ -16,6 +17,23 @@ router.get('/', async (req, res, next) => {
   try {
     const productos = await service.find();
     res.json(productos);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/byProducto', async (req, res, next) => {
+  try {
+    const { nombre } = req.query;
+
+    if (!nombre) {
+      return res
+        .status(400)
+        .json({ error: 'Parámetro de consulta "marca" requerido' });
+    }
+
+    const marcas = await service.findByName(nombre);
+    res.json(marcas);
   } catch (error) {
     next(error);
   }
@@ -60,6 +78,22 @@ router.put(
       const body = req.body;
       const producto = await service.update(id, body);
       res.json(producto);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+router.patch(
+  '/:id/usuariomodif',
+  validatorHandler(GetProductoSchema, 'params'),
+  validatorHandler(UpdateProductoModifSchema, 'body'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const body = req.body;
+      const usuario = await service.update(id, body);
+      res.json(usuario);
     } catch (error) {
       next(error);
     }

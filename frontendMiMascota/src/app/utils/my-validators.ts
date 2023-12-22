@@ -5,6 +5,7 @@ import { catchError, map, delay } from 'rxjs/operators';
 import { UsuarioModel } from '../core/models/usuario.model';
 import { MarcaService } from '../core/services/marca.service';
 import { CategoriaService } from '../core/services/categoria.service';
+import { CajaService } from '../core/services/caja.service';
 
 export class MyValidators {
   static estado: string;
@@ -20,23 +21,24 @@ export class MyValidators {
     console.log('usuario en edición ID', campo);
   }
 
-  static ValidarUsername(service: UsuarioService) {
+  static ValidarCampoExistente(service: any, methodName: string) {
     return (
       control: AbstractControl
     ): Observable<{ [key: string]: any } | null> => {
       if (MyValidators.estado === 'Editar') {
-        console.log('ingreso al if ');
-        if (control.value === MyValidators.campo) {
+        if (
+          control.value === MyValidators.campo ||
+          MyValidators.campo === undefined
+        ) {
           return of(null);
         }
       }
 
       const value = control.value;
-      console.log('value', value, 'MyValidators.usuarioId', MyValidators.campo);
-      return service.findByUsername(value).pipe(
+
+      return service[methodName](value).pipe(
         map((response: any) => {
           const isAvailable = response.isAvailable;
-          console.log(response);
 
           if (!isAvailable) {
             return { not_available: true };
@@ -46,63 +48,5 @@ export class MyValidators {
         catchError(() => of(null).pipe(delay(0)))
       );
     };
-  }
-
-  static ValidarMarca(service: MarcaService) {
-    return (
-      control: AbstractControl
-    ): Observable<{ [key: string]: any } | null> => {
-      if (MyValidators.estado === 'Editar') {
-        console.log('ingreso al if ');
-        if (control.value === MyValidators.campo) {
-          return of(null);
-        }
-      }
-
-      const value = control.value;
-      console.log('value', value, 'MyValidators.campo', MyValidators.campo);
-      return service.findByMarca(value).pipe(
-        map((response: any) => {
-          const isAvailable = response.isAvailable;
-          console.log('validatos marca', response);
-
-          if (!isAvailable) {
-            return { not_available: true };
-          }
-          return null;
-        }),
-        catchError(() => of(null).pipe(delay(0)))
-      );
-    };
-  }
-
-  static ValidarCategoria(service: CategoriaService) {
-    {
-      return (
-        control: AbstractControl
-      ): Observable<{ [key: string]: any } | null> => {
-        if (MyValidators.estado === 'Editar') {
-          console.log('ingreso al if ');
-          if (control.value === MyValidators.campo) {
-            return of(null);
-          }
-        }
-
-        const value = control.value;
-        console.log('value', value, 'MyValidators.campo', MyValidators.campo);
-        return service.findByCategoria(value).pipe(
-          map((response: any) => {
-            const isAvailable = response.isAvailable;
-            console.log('validatos marca', response);
-
-            if (!isAvailable) {
-              return { not_available: true };
-            }
-            return null;
-          }),
-          catchError(() => of(null).pipe(delay(0)))
-        );
-      };
-    }
   }
 }

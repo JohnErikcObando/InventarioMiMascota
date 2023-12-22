@@ -13,7 +13,7 @@ CREATE OR REPLACE PROCEDURE public.p_ingresar_historial(
 LANGUAGE 'plpgsql'
 AS $BODY$
 BEGIN
-    INSERT INTO historial (usuario, campo, modulo, identificador, fecha, nuevo, anterior, accion)
+    INSERT INTO historial (usuario_modif, campo, modulo, identificador, fecha, nuevo, anterior, accion)
     VALUES (p_usuario, p_campo, p_modulo, p_identificador, NOW(), p_nuevo, p_anterior, p_accion);
 END;
 $BODY$;

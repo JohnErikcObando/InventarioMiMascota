@@ -1,6 +1,7 @@
 const boom = require('@hapi/boom');
 
 const { models } = require('./../libs/sequelize');
+const { Sequelize } = require('sequelize');
 
 class CajaService {
   constructor() {}
@@ -18,6 +19,22 @@ class CajaService {
   async findOne(id) {
     const caja = await models.Caja.findByPk(id);
     if (!caja) {
+      throw boom.notFound('Caja not found');
+    }
+
+    return caja;
+  }
+
+  async findByName(nombre) {
+    const caja = await models.Caja.findAll({
+      where: {
+        nombre: {
+          [Sequelize.Op.iLike]: nombre,
+        },
+      },
+    });
+
+    if (!caja || caja.length === 0) {
       throw boom.notFound('Caja not found');
     }
 

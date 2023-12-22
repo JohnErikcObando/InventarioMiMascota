@@ -5,6 +5,7 @@ const {
   CreateCajaSchema,
   UpdateCajaSchema,
   GetCajaSchema,
+  UpdateCajaModifSchema,
 } = require('../Schemas/caja.schema');
 const boom = require('@hapi/boom');
 
@@ -15,6 +16,23 @@ router.get('/', async (req, res, next) => {
   try {
     const cajas = await service.find();
     res.json(cajas);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/byCaja', async (req, res, next) => {
+  try {
+    const { nombre } = req.query;
+
+    if (!nombre) {
+      return res
+        .status(400)
+        .json({ error: 'Parámetro de consulta "Compra" requerido' });
+    }
+
+    const marcas = await service.findByName(nombre);
+    res.json(marcas);
   } catch (error) {
     next(error);
   }
@@ -58,6 +76,22 @@ router.put(
       const body = req.body;
       const caja = await service.update(id, body);
       res.json(caja);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+router.patch(
+  '/:id/usuariomodif',
+  validatorHandler(GetCajaSchema, 'params'),
+  validatorHandler(UpdateCajaModifSchema, 'body'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const body = req.body;
+      const usuario = await service.update(id, body);
+      res.json(usuario);
     } catch (error) {
       next(error);
     }

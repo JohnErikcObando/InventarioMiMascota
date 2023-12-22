@@ -1,0 +1,89 @@
+<form [formGroup]="form" (ngSubmit)="save($event)" class="mobile-form">
+  <div class="modal-container">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Caja</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content class="card-content-container">
+        <div class="form-row">
+          <mat-form-field class="half-width">
+            <mat-label>Nombre</mat-label>
+            <input
+              matInput
+              formControlName="nombre"
+              [value]="nombre?.value | ajustarTexto | removeSpaces"
+            />
+            <mat-error *ngIf="form.get('nombre')?.hasError('required')"
+              >Campo requerido</mat-error
+            >
+            <mat-error *ngIf="nombre && nombre.hasError('not_available')"
+              >El Usuario ya existe</mat-error
+            >
+            <mat-error *ngIf="nombre && nombre.hasError('minlength')"
+              >Minimo 4 caracteres</mat-error
+            >
+          </mat-form-field>
+
+          <mat-form-field class="half-width">
+            <mat-label>Num Factura</mat-label>
+            <input matInput formControlName="numFactura" type="number" />
+            <mat-error *ngIf="form.get('numFactura')?.hasError('required')"
+              >Campo requerido</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field class="half-width">
+            <mat-label>Prefijo</mat-label>
+            <input
+              matInput
+              formControlName="prefijo"
+              [value]="prefijo?.value | ajustarTexto | removeSpaces"
+            />
+            <mat-error *ngIf="form.get('prefijo')?.hasError('required')"
+              >Campo requerido</mat-error
+            >
+            <mat-error *ngIf="prefijo && prefijo.hasError('maxlength')"
+              >maximo 2 caracteres</mat-error
+            >
+          </mat-form-field>
+
+          <mat-form-field class="half-width">
+            <mat-label>Tipo Documento</mat-label>
+            <mat-select formControlName="tipoFactura">
+              <mat-option value="Compora">Compra</mat-option>
+              <mat-option value="Venta">Venta</mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.get('tipoFactura')?.hasError('required')"
+              >Campo requerido</mat-error
+            >
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions class="button-container">
+        <button
+          class="button-row"
+          mat-stroked-button
+          type="button"
+          color="Basic"
+          (click)="cerrarDialog()"
+        >
+          Cerrar
+        </button>
+
+        <button
+          class="button-row"
+          mat-raised-button
+          type="submit"
+          [disabled]="form.invalid"
+          color="primary"
+        >
+          {{ botonAccion }}
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</form>

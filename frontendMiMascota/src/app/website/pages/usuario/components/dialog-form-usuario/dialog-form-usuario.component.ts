@@ -130,7 +130,7 @@ export class DialogFormUsuarioComponent {
       usuario: [
         '',
         [Validators.required, Validators.minLength(4)],
-        MyValidators.ValidarUsername(this.usuarioService),
+        MyValidators.ValidarCampoExistente(this.usuarioService, 'findByUsername'),
       ],
       password: ['', Validators.required],
       nombre: ['', Validators.required],

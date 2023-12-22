@@ -5,6 +5,7 @@ import { LayoutComponent } from '../components/layout/layout.component';
 import { EmpresaModule } from './empresa/empresa.module';
 import { UsuarioModule } from './usuario/usuario.module';
 import { MarcaModule } from './marca/marca.module';
+import { CajaModule } from './caja/caja.module';
 
 const routes: Routes = [
   {
@@ -37,6 +38,11 @@ const routes: Routes = [
         path: 'categoria',
         loadChildren: () =>
           import('./categoria/categoria.module').then((m) => CategoriaModule),
+      },
+      {
+        path: 'caja',
+        loadChildren: () =>
+          import('./caja/caja.module').then((m) => CajaModule),
       },
     ],
   },

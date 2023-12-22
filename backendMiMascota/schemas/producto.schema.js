@@ -36,8 +36,13 @@ const GetProductoSchema = Joi.object({
   id: id.required(),
 });
 
+const UpdateProductoModifSchema = Joi.object({
+  usuarioModif,
+});
+
 module.exports = {
   CreateProductoSchema,
   UpdateProductoSchema,
   GetProductoSchema,
+  UpdateProductoModifSchema,
 };
