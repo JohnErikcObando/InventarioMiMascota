@@ -7,7 +7,7 @@ import {
 import { environment } from 'src/environments/environment';
 import {
   CategoriaModel,
-  CreateCatgegoriaDTO,
+  CreateCategoriaDTO,
   UpdateCategoriaDTO,
 } from '../models/categoria.model';
 import { catchError, throwError } from 'rxjs';
@@ -20,7 +20,7 @@ export class CategoriaService {
 
   constructor(private http: HttpClient) {}
 
-  create(dto: CreateCatgegoriaDTO) {
+  create(dto: CreateCategoriaDTO) {
     return this.http.post<CategoriaModel>(this.apiUrl, dto);
   }
 

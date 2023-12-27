@@ -1,0 +1,58 @@
+<form [formGroup]="form" (ngSubmit)="save($event)" class="mobile-form">
+  <div class="modal-container">
+    <div class="dialog">
+      <h2>Impuesto</h2>
+
+      <div class="form-content">
+        <div class="form-row">
+          <mat-form-field class="full-width">
+            <mat-label>Nombre</mat-label>
+            <input
+              matInput
+              formControlName="nombre"
+              [value]="nombre?.value | ajustarTexto"
+            />
+            <mat-error *ngIf="form.get('nombre')?.hasError('required')"
+              >Campo requerido</mat-error
+            >
+            <mat-error *ngIf="nombre && nombre.hasError('not_available')"
+              >El nombre ya existe</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field class="full-width">
+            <mat-label>Porcentaje</mat-label>
+            <input matInput formControlName="porcentaje" type="number" />
+            <mat-error *ngIf="form.get('nombre')?.hasError('required')"
+              >Campo requerido</mat-error
+            >
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="button-container">
+        <button
+          class="button-row"
+          mat-stroked-button
+          type="button"
+          color="basic"
+          (click)="cerrarDialog()"
+        >
+          Cerrar
+        </button>
+
+        <button
+          class="button-row"
+          mat-raised-button
+          type="submit"
+          [disabled]="form.invalid"
+          color="primary"
+        >
+          {{ botonAccion }}
+        </button>
+      </div>
+    </div>
+  </div>
+</form>

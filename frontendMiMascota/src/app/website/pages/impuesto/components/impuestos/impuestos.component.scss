@@ -1,0 +1,36 @@
+/* Tu estilo CSS actualizado */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
+}
+
+h2 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+button {
+  margin-bottom: 10px;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.table-container {
+  overflow: auto;
+  max-height: 400px;
+  width: 100%; /* Ajusta la altura máxima de la tabla según tus necesidades */
+}
+
+.table {
+  width: 100%;
+}
+
+mat-paginator {
+  margin-top: 10px;
+  width: 100%;
+}

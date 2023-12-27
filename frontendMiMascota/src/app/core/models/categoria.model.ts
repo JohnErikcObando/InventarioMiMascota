@@ -5,5 +5,5 @@ export interface CategoriaModel {
   usuarioModif: string;
 }
 
-export interface CreateCatgegoriaDTO extends Omit<CategoriaModel, 'id'> {}
-export interface UpdateCategoriaDTO extends Partial<CreateCatgegoriaDTO> {}
+export interface CreateCategoriaDTO extends Omit<CategoriaModel, 'id'> {}
+export interface UpdateCategoriaDTO extends Partial<CreateCategoriaDTO> {}

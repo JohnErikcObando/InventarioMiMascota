@@ -9,6 +9,7 @@ import { CajaModule } from './caja/caja.module';
 import { FormaPagoModule } from './forma-pago/forma-pago.module';
 import { ProveedorModule } from './proveedor/proveedor.module';
 import { ClienteModule } from './cliente/cliente.module';
+import { ImpuestoModule } from './impuesto/impuesto.module';
 
 const routes: Routes = [
   {
@@ -61,6 +62,11 @@ const routes: Routes = [
         path: 'cliente',
         loadChildren: () =>
           import('./cliente/cliente.module').then((m) => ClienteModule),
+      },
+      {
+        path: 'impuesto',
+        loadChildren: () =>
+          import('./impuesto/impuesto.module').then((m) => ImpuestoModule),
       },
     ],
   },

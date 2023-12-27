@@ -22,7 +22,7 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.get('/byImpuesto', async (req, res, next) => {
+router.get('/ByImpuesto', async (req, res, next) => {
   try {
     const { nombre } = req.query;
 
@@ -32,8 +32,8 @@ router.get('/byImpuesto', async (req, res, next) => {
         .json({ error: 'Parámetro de consulta "usuario" requerido' });
     }
 
-    const categorias = await service.findByName(nombre);
-    res.json(categorias);
+    const impuesto = await service.findByName(nombre);
+    res.json(impuesto);
   } catch (error) {
     next(error);
   }
