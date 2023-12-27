@@ -30,8 +30,8 @@ router.get('/byFormaPago', async (req, res, next) => {
         .json({ error: 'Parámetro de consulta "usuario" requerido' });
     }
 
-    const categorias = await service.findByName(nombre);
-    res.json(categorias);
+    const formaPago = await service.findByName(nombre);
+    res.json(formaPago);
   } catch (error) {
     next(error);
   }

@@ -9,6 +9,7 @@ import { CajaService } from '../core/services/caja.service';
 import { FormaPagoService } from './../core/services/forma-pago.service';
 import { UsuarioService } from '../core/services/usuario.service';
 import { ProveedorService } from '../core/services/proveedor.service';
+import { ProductoService } from '../core/services/producto.service';
 
 export class MyValidators {
   static estado: string;

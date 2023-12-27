@@ -35,7 +35,7 @@ class ProductoService {
   }
 
   async findByName(nombre) {
-    const productos = await models.Marca.findAll({
+    const productos = await models.Producto.findAll({
       where: {
         nombre: {
           [Sequelize.Op.iLike]: nombre,

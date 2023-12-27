@@ -10,6 +10,7 @@ import { FormaPagoModule } from './forma-pago/forma-pago.module';
 import { ProveedorModule } from './proveedor/proveedor.module';
 import { ClienteModule } from './cliente/cliente.module';
 import { ImpuestoModule } from './impuesto/impuesto.module';
+import { ProductoModule } from './producto/producto.module';
 
 const routes: Routes = [
   {
@@ -67,6 +68,11 @@ const routes: Routes = [
         path: 'impuesto',
         loadChildren: () =>
           import('./impuesto/impuesto.module').then((m) => ImpuestoModule),
+      },
+      {
+        path: 'producto',
+        loadChildren: () =>
+          import('./producto/producto.module').then((m) => ProductoModule),
       },
     ],
   },

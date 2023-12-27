@@ -32,8 +32,8 @@ router.get('/byProducto', async (req, res, next) => {
         .json({ error: 'Parámetro de consulta "marca" requerido' });
     }
 
-    const marcas = await service.findByName(nombre);
-    res.json(marcas);
+    const producto = await service.findByName(nombre);
+    res.json(producto);
   } catch (error) {
     next(error);
   }

@@ -1,0 +1,113 @@
+<form [formGroup]="form" (ngSubmit)="save($event)" class="mobile-form">
+  <div class="modal-container">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Producto</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content class="card-content-container">
+        <div class="form-row">
+          <mat-form-field class="full-width">
+            <mat-label>Nombre</mat-label>
+            <input
+              matInput
+              formControlName="nombre"
+              [value]="nombre?.value | ajustarTexto"
+            />
+            <mat-error *ngIf="form.get('nombre')?.hasError('required')"
+              >Campo requerido</mat-error
+            >
+            <mat-error *ngIf="nombre && nombre.hasError('not_available')"
+              >El nombre ya existe</mat-error
+            >
+            <mat-error *ngIf="nombre && nombre.hasError('minlength')"
+              >Minimo 4 caracteres</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field class="half-width">
+            <mat-label>Marca</mat-label>
+            <mat-select formControlName="marcaId">
+              <mat-option *ngFor="let item of marcas" [value]="item.id">{{
+                item.nombre
+              }}</mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="form.get('marcaId')?.hasError('required')"
+              >Campo requerido</mat-error
+            >
+          </mat-form-field>
+
+          <mat-form-field class="half-width">
+            <mat-label>Categoria</mat-label>
+            <mat-select formControlName="categoriaId">
+              <mat-option *ngFor="let item of categorias" [value]="item.id">{{
+                item.nombre
+              }}</mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="form.get('categoria')?.hasError('required')"
+              >Campo requerido</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field class="half-width">
+            <mat-label>Valor</mat-label>
+            <input matInput formControlName="valor" type="number" />
+            <mat-error *ngIf="form.get('valor')?.hasError('required')"
+              >Campo requerido</mat-error
+            >
+          </mat-form-field>
+
+          <mat-form-field class="half-width">
+            <mat-label>Codigo</mat-label>
+            <input matInput formControlName="codigo" />
+            <mat-error *ngIf="form.get('codigo')?.hasError('required')"
+              >Campo requerido</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field class="full-width">
+            <mat-label>Descripción</mat-label>
+            <textarea
+              matInput
+              formControlName="descripcion"
+              [value]="descripcion?.value | ajustarTexto"
+            ></textarea>
+            <mat-error *ngIf="descripcion && descripcion.hasError('maxlength')"
+              >Máximo 500 caracteres</mat-error
+            >
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions class="button-container">
+        <button
+          class="button-row"
+          mat-stroked-button
+          type="button"
+          color="Basic"
+          (click)="cerrarDialog()"
+        >
+          Cerrar
+        </button>
+
+        <button
+          class="button-row"
+          mat-raised-button
+          type="submit"
+          [disabled]="form.invalid"
+          color="primary"
+        >
+          {{ botonAccion }}
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</form>
