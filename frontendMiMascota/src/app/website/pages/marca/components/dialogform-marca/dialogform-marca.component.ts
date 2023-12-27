@@ -95,7 +95,11 @@ export class DialogformMarcaComponent {
       nombre: [
         '',
         [Validators.required],
-        MyValidators.ValidarCampoExistente(this.marcaService, 'findByMarca'),
+        MyValidators.ValidarCampoExistente(
+          this.marcaService,
+          'findByMarca',
+          'nombre'
+        ),
       ],
       descripcion: ['', [Validators.maxLength(500)]],
       usuarioModif: ['MiMascota'],

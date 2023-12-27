@@ -98,7 +98,8 @@ export class DialogFormCategoriaComponent {
         [Validators.required],
         MyValidators.ValidarCampoExistente(
           this.categoriaService,
-          'findByCategoria'
+          'findByCategoria',
+          'nombre'
         ),
       ],
       descripcion: ['', [Validators.maxLength(500)]],

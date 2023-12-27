@@ -1,6 +1,7 @@
 const boom = require('@hapi/boom');
 
 const { models } = require('./../libs/sequelize');
+const { Sequelize } = require('sequelize');
 
 class ProveedorService {
   constructor() {}
@@ -20,6 +21,39 @@ class ProveedorService {
     if (!proveedor) {
       throw boom.notFound('Proveedor not found');
     }
+    return proveedor;
+  }
+
+  async findById(id) {
+    const trimId = id.trim();
+    const proveedor = await models.Proveedor.findAll({
+      where: {
+        id: {
+          [Sequelize.Op.iLike]: trimId,
+        },
+      },
+    });
+
+    if (!proveedor || proveedor.length === 0) {
+      throw boom.notFound('proveedor Id not found');
+    }
+
+    return proveedor;
+  }
+
+  async findByName(nombre) {
+    const proveedor = await models.Proveedor.findAll({
+      where: {
+        nombre: {
+          [Sequelize.Op.iLike]: nombre,
+        },
+      },
+    });
+
+    if (!proveedor || proveedor.length === 0) {
+      throw boom.notFound('proveedor not found');
+    }
+
     return proveedor;
   }
 

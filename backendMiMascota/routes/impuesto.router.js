@@ -7,6 +7,7 @@ const {
   CreateImpuestoSchema,
   UpdateImpuestoSchema,
   GetImpuestoSchema,
+  UpdateImpuestoModifSchema,
 } = require('../Schemas/impuesto.schema');
 
 const router = express.Router();
@@ -16,6 +17,23 @@ router.get('/', async (req, res, next) => {
   try {
     const impuestos = await service.find();
     res.json(impuestos);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/byImpuesto', async (req, res, next) => {
+  try {
+    const { nombre } = req.query;
+
+    if (!nombre) {
+      return res
+        .status(400)
+        .json({ error: 'Parámetro de consulta "usuario" requerido' });
+    }
+
+    const categorias = await service.findByName(nombre);
+    res.json(categorias);
   } catch (error) {
     next(error);
   }
@@ -43,6 +61,22 @@ router.post(
       const body = req.body;
       const newImpuesto = await service.create(body);
       res.status(201).json(newImpuesto);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+router.patch(
+  '/:id/usuariomodif',
+  validatorHandler(GetImpuestoSchema, 'params'),
+  validatorHandler(UpdateImpuestoModifSchema, 'body'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const body = req.body;
+      const usuario = await service.update(id, body);
+      res.json(usuario);
     } catch (error) {
       next(error);
     }

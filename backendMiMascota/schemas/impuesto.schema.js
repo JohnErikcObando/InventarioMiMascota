@@ -21,8 +21,13 @@ const GetImpuestoSchema = Joi.object({
   id: id.required(),
 });
 
+const UpdateImpuestoModifSchema = Joi.object({
+  usuarioModif,
+});
+
 module.exports = {
   CreateImpuestoSchema,
   UpdateImpuestoSchema,
   GetImpuestoSchema,
+  UpdateImpuestoModifSchema,
 };

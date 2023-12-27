@@ -1,0 +1,157 @@
+<form [formGroup]="form" (ngSubmit)="save($event)" class="mobile-form">
+  <div class="modal-container">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Cliente</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content class="card-content-container">
+        <div class="form-row">
+          <mat-form-field class="half-width">
+            <mat-label>Cedula</mat-label>
+            <input matInput formControlName="id" />
+            <mat-error *ngIf="form.get('id')?.hasError('required')"
+              >Campo requerido</mat-error
+            >
+            <mat-error *ngIf="id && id.hasError('not_available')"
+              >La cedula ya existe</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field class="half-width">
+            <mat-label>Nombre</mat-label>
+            <input
+              matInput
+              formControlName="nombre"
+              [value]="nombre?.value | ajustarTexto"
+            />
+            <mat-error *ngIf="form.get('nombre')?.hasError('required')"
+              >Campo requerido</mat-error
+            >
+            <mat-error *ngIf="nombre && nombre.hasError('not_available')"
+              >El nombre ya existe</mat-error
+            >
+            <mat-error *ngIf="nombre && nombre.hasError('minlength')"
+              >Minimo 4 caracteres</mat-error
+            >
+          </mat-form-field>
+
+          <mat-form-field class="half-width">
+            <mat-label>Apellido</mat-label>
+            <input
+              matInput
+              formControlName="apellido"
+              [value]="apellido?.value | ajustarTexto"
+            />
+            <mat-error *ngIf="form.get('apellido')?.hasError('required')"
+              >Campo requerido</mat-error
+            >
+            <mat-error *ngIf="apellido && apellido.hasError('not_available')"
+              >El apellido ya existe</mat-error
+            >
+            <mat-error *ngIf="apellido && apellido.hasError('minlength')"
+              >Minimo 4 caracteres</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field class="half-width">
+            <mat-label>Telefono</mat-label>
+            <input
+              matInput
+              formControlName="telefono"
+              [value]="telefono?.value | removeSpaces"
+            />
+            <mat-error
+              *ngIf="
+                telefono?.hasError('minlength') ||
+                telefono?.hasError('maxlength')
+              "
+            >
+              Requiere 10 numeros
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="half-width">
+            <mat-label>Celular</mat-label>
+            <input
+              matInput
+              formControlName="celular"
+              [value]="celular?.value | removeSpaces"
+            />
+
+            <mat-error
+              *ngIf="
+                celular?.hasError('minlength') || celular?.hasError('maxlength')
+              "
+            >
+              Requiere 10 numeros
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field class="full-width">
+            <mat-label>Direccion</mat-label>
+            <input
+              matInput
+              formControlName="direccion"
+              [value]="direccion?.value | ajustarTexto"
+            />
+            <mat-error *ngIf="form.get('direccion')?.hasError('required')"
+              >Campo requerido</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field class="full-width">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" />
+            <mat-error
+              *ngIf="
+                form.get('email')?.hasError('required') &&
+                !form.get('email')?.value
+              "
+            >
+              Campo requerido
+            </mat-error>
+            <mat-error
+              *ngIf="
+                form.get('email')?.hasError('email') ||
+                form.get('email')?.hasError('customEmailFormat')
+              "
+            >
+              Email no válido
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions class="button-container">
+        <button
+          class="button-row"
+          mat-stroked-button
+          type="button"
+          color="Basic"
+          (click)="cerrarDialog()"
+        >
+          Cerrar
+        </button>
+
+        <button
+          class="button-row"
+          mat-raised-button
+          type="submit"
+          [disabled]="form.invalid"
+          color="primary"
+        >
+          {{ botonAccion }}
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</form>

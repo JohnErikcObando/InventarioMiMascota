@@ -96,7 +96,11 @@ export class DialogFromCajaComponent {
       nombre: [
         '',
         [Validators.required, Validators.minLength(4)],
-        MyValidators.ValidarCampoExistente(this.cajaService, 'findByCaja'),
+        MyValidators.ValidarCampoExistente(
+          this.cajaService,
+          'findByCaja',
+          'nombre'
+        ),
       ],
       numFactura: ['0', [Validators.required]],
       prefijo: ['', [Validators.required, Validators.maxLength(2)]],

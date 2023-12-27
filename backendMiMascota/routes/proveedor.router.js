@@ -7,6 +7,7 @@ const {
   CreateProveedorSchema,
   UpdateProveedorSchema,
   GetProveedorSchema,
+  UpdateProveedorModifSchema,
 } = require('../Schemas/proveedor.schema');
 
 const router = express.Router();
@@ -16,6 +17,40 @@ router.get('/', async (req, res, next) => {
   try {
     const proveedores = await service.find();
     res.json(proveedores);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/byId', async (req, res, next) => {
+  try {
+    const { id } = req.query;
+
+    if (!id) {
+      return res
+        .status(400)
+        .json({ error: 'Parámetro de consulta "usuario" requerido' });
+    }
+
+    const proveedor = await service.findById(id);
+    res.json(proveedor);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/byProveedor', async (req, res, next) => {
+  try {
+    const { nombre } = req.query;
+
+    if (!nombre) {
+      return res
+        .status(400)
+        .json({ error: 'Parámetro de consulta "usuario" requerido' });
+    }
+
+    const proveedor = await service.findByName(nombre);
+    res.json(proveedor);
   } catch (error) {
     next(error);
   }
@@ -59,6 +94,22 @@ router.put(
       const body = req.body;
       const proveedor = await service.update(id, body);
       res.json(proveedor);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+router.patch(
+  '/:id/usuariomodif',
+  validatorHandler(GetProveedorSchema, 'params'),
+  validatorHandler(UpdateProveedorModifSchema, 'body'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const body = req.body;
+      const usuario = await service.update(id, body);
+      res.json(usuario);
     } catch (error) {
       next(error);
     }

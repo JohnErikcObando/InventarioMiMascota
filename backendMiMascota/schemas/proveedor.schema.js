@@ -34,8 +34,13 @@ const GetProveedorSchema = Joi.object({
   id: id.required(),
 });
 
+const UpdateProveedorModifSchema = Joi.object({
+  usuarioModif,
+});
+
 module.exports = {
   CreateProveedorSchema,
   UpdateProveedorSchema,
   GetProveedorSchema,
+  UpdateProveedorModifSchema,
 };

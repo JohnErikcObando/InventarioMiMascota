@@ -8,10 +8,12 @@ import { CategoriaService } from '../core/services/categoria.service';
 import { CajaService } from '../core/services/caja.service';
 import { FormaPagoService } from './../core/services/forma-pago.service';
 import { UsuarioService } from '../core/services/usuario.service';
+import { ProveedorService } from '../core/services/proveedor.service';
 
 export class MyValidators {
   static estado: string;
   static campo: string;
+  static campoDos: string;
 
   static setEstado(estado: string) {
     MyValidators.estado = estado;
@@ -23,13 +25,32 @@ export class MyValidators {
     console.log('usuario en edición ID', campo);
   }
 
-  static ValidarCampoExistente(service: any, methodName: string) {
+  static setCampoDos(campoDos: string) {
+    MyValidators.campoDos = campoDos;
+    console.log('usuario en edición ID', campoDos);
+  }
+
+  static ValidarCampoExistente(
+    service: any,
+    methodName: string,
+    fieldName: string
+  ) {
     return (
       control: AbstractControl
     ): Observable<{ [key: string]: any } | null> => {
+      console.log(
+        'value',
+        control.value,
+        'campo',
+        MyValidators.campo,
+        'campodos',
+        MyValidators.campoDos
+      );
+
       if (MyValidators.estado === 'Editar') {
         if (
-          control.value === MyValidators.campo ||
+          (fieldName === 'nombre' && control.value === MyValidators.campo) ||
+          (fieldName === 'id' && control.value === MyValidators.campoDos) ||
           MyValidators.campo === undefined
         ) {
           return of(null);

@@ -97,7 +97,8 @@ export class DialogFromFormaPagoComponent {
         [Validators.required],
         MyValidators.ValidarCampoExistente(
           this.formaPagoService,
-          'findByFormaPago'
+          'findByFormaPago',
+          'nombre'
         ),
       ],
       usuarioModif: ['MiMascota'],

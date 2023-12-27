@@ -7,6 +7,8 @@ import { UsuarioModule } from './usuario/usuario.module';
 import { MarcaModule } from './marca/marca.module';
 import { CajaModule } from './caja/caja.module';
 import { FormaPagoModule } from './forma-pago/forma-pago.module';
+import { ProveedorModule } from './proveedor/proveedor.module';
+import { ClienteModule } from './cliente/cliente.module';
 
 const routes: Routes = [
   {
@@ -49,6 +51,16 @@ const routes: Routes = [
         path: 'formaPago',
         loadChildren: () =>
           import('./forma-pago/forma-pago.module').then((m) => FormaPagoModule),
+      },
+      {
+        path: 'proveedor',
+        loadChildren: () =>
+          import('./proveedor/proveedor.module').then((m) => ProveedorModule),
+      },
+      {
+        path: 'cliente',
+        loadChildren: () =>
+          import('./cliente/cliente.module').then((m) => ClienteModule),
       },
     ],
   },

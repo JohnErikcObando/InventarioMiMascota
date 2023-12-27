@@ -1,6 +1,7 @@
 const boom = require('@hapi/boom');
 
 const { models } = require('./../libs/sequelize');
+const { Sequelize } = require('sequelize');
 
 class ClienteService {
   constructor() {}
@@ -20,6 +21,23 @@ class ClienteService {
     if (!cliente) {
       throw boom.notFound('Cliente not found');
     }
+    return cliente;
+  }
+
+  async findById(id) {
+    const trimId = id.trim();
+    const cliente = await models.Cliente.findAll({
+      where: {
+        id: {
+          [Sequelize.Op.iLike]: trimId,
+        },
+      },
+    });
+
+    if (!cliente || cliente.length === 0) {
+      throw boom.notFound('Cliente Id not found');
+    }
+
     return cliente;
   }
 

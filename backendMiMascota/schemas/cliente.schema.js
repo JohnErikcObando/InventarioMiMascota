@@ -21,6 +21,7 @@ const CreateClienteSchema = Joi.object({
 });
 
 const UpdateClienteSchema = Joi.object({
+  id,
   nombre,
   apellido,
   direccion,
@@ -32,6 +33,15 @@ const UpdateClienteSchema = Joi.object({
 
 const GetClienteSchema = Joi.object({
   id,
-}).required();
+});
 
-module.exports = { CreateClienteSchema, UpdateClienteSchema, GetClienteSchema };
+const UpdateClienteModifSchema = Joi.object({
+  usuarioModif,
+});
+
+module.exports = {
+  CreateClienteSchema,
+  UpdateClienteSchema,
+  GetClienteSchema,
+  UpdateClienteModifSchema,
+};

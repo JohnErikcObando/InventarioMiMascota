@@ -5,6 +5,7 @@ const {
   CreateClienteSchema,
   UpdateClienteSchema,
   GetClienteSchema,
+  UpdateClienteModifSchema,
 } = require('../Schemas/cliente.schema');
 const boom = require('@hapi/boom');
 
@@ -15,6 +16,23 @@ router.get('/', async (req, res, next) => {
   try {
     const clientes = await service.find();
     res.json(clientes);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/byId', async (req, res, next) => {
+  try {
+    const { id } = req.query;
+
+    if (!id) {
+      return res
+        .status(400)
+        .json({ error: 'Parámetro de consulta "usuario" requerido' });
+    }
+
+    const proveedor = await service.findById(id);
+    res.json(proveedor);
   } catch (error) {
     next(error);
   }
@@ -58,6 +76,22 @@ router.put(
       const body = req.body;
       const cliente = await service.update(id, body);
       res.json(cliente);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+router.patch(
+  '/:id/usuariomodif',
+  validatorHandler(GetClienteSchema, 'params'),
+  validatorHandler(UpdateClienteModifSchema, 'body'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const body = req.body;
+      const usuario = await service.update(id, body);
+      res.json(usuario);
     } catch (error) {
       next(error);
     }
