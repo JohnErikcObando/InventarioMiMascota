@@ -11,6 +11,7 @@ import { ProveedorModule } from './proveedor/proveedor.module';
 import { ClienteModule } from './cliente/cliente.module';
 import { ImpuestoModule } from './impuesto/impuesto.module';
 import { ProductoModule } from './producto/producto.module';
+import { FacturaCompraModule } from './factura-compra/factura-compra.module';
 
 const routes: Routes = [
   {
@@ -73,6 +74,13 @@ const routes: Routes = [
         path: 'producto',
         loadChildren: () =>
           import('./producto/producto.module').then((m) => ProductoModule),
+      },
+      {
+        path: 'facturaCompra',
+        loadChildren: () =>
+          import('./factura-compra/factura-compra.module').then(
+            (m) => FacturaCompraModule
+          ),
       },
     ],
   },

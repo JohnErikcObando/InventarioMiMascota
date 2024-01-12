@@ -1,0 +1,377 @@
+<form
+  [formGroup]="form"
+  (ngSubmit)="save($event)"
+  class="full-width-container"
+  (keydown)="preventEnter($event)"
+>
+  <!-- Campos principales -->
+
+  <h2>Factura Compra</h2>
+
+  <mat-form-field class="half-width">
+    <mat-label>Fecha</mat-label>
+    <input
+      matInput
+      [matDatepicker]="picker"
+      [formControl]="date"
+      formControlName="fecha"
+    />
+    <mat-hint>MM/DD/YYYY</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    <mat-error *ngIf="form.get('fecha')?.hasError('required')"
+      >Campo requerido</mat-error
+    >
+  </mat-form-field>
+
+  <mat-form-field class="half-width">
+    <mat-label>Caja</mat-label>
+    <mat-select formControlName="cajaId">
+      <mat-option *ngFor="let caja of cajas" [value]="caja.id">
+        {{ caja.nombre }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="half-width">
+    <mat-label>Forma Pago</mat-label>
+    <mat-select formControlName="formaPagoId">
+      <mat-option *ngFor="let formaPago of formasPago" [value]="formaPago.id">
+        {{ formaPago.nombre }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-checkbox class="half-width" formControlName="anulado"
+    >Anulado</mat-checkbox
+  >
+
+  <mat-form-field class="full-width">
+    <mat-label>Descripción</mat-label>
+    <input matInput formControlName="descripcion" />
+    <mat-error *ngIf="form.get('descripcion')?.hasError('required')"
+      >Campo requerido</mat-error
+    >
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Imagen URL</mat-label>
+    <input matInput formControlName="imagenUrl" />
+    <mat-error *ngIf="form.get('imagenUrl')?.hasError('required')"
+      >Campo requerido</mat-error
+    >
+  </mat-form-field>
+
+  <!-- *************************************************************************************************** -->
+  <!-- **************************************proveedorFactura********************************************* -->
+  <!-- *************************************************************************************************** -->
+
+  <h2>Info Proveedor</h2>
+  <div formGroupName="proveedorFactura">
+    <div class="modal-container">
+      <mat-card>
+        <mat-card-header>
+          <!-- <mat-card-title>Proveedor</mat-card-title> -->
+        </mat-card-header>
+
+        <mat-card-content class="card-content-container">
+          <!-- Fila 1 -->
+          <div class="form-row">
+            <mat-form-field class="half-width">
+              <mat-label>Cedula</mat-label>
+              <input matInput formControlName="id" />
+              <mat-error *ngIf="idProveedor?.hasError('required')"
+                >Campo requerido</mat-error
+              >
+              <mat-error *ngIf="idProveedor?.hasError('not_available')"
+                >La cedula ya existe</mat-error
+              >
+            </mat-form-field>
+
+            <mat-form-field class="half-width">
+              <mat-label>Nombre</mat-label>
+              <input
+                matInput
+                formControlName="nombre"
+                [matAutocomplete]="auto"
+                [value]="nombreProveedor?.value | ajustarTexto"
+              />
+              <mat-autocomplete
+                #auto="matAutocomplete"
+                (optionSelected)="selectProveedor($event.option.value)"
+              >
+                <mat-option
+                  *ngFor="let proveedor of proveedoresFiltrados"
+                  [value]="proveedor"
+                >
+                  {{ proveedor.nombre }}
+                </mat-option>
+              </mat-autocomplete>
+              <mat-error *ngIf="nombreProveedor?.hasError('required')"
+                >Campo requerido</mat-error
+              >
+              <mat-error *ngIf="nombreProveedor?.hasError('minlength')"
+                >Minimo 4 caracteres</mat-error
+              >
+            </mat-form-field>
+
+            <mat-form-field class="half-width">
+              <mat-label>Telefono</mat-label>
+              <input
+                matInput
+                formControlName="telefono"
+                [value]="telefonoProveedor?.value | removeSpaces | numeric"
+              />
+              <mat-error
+                *ngIf="
+                  telefonoProveedor?.hasError('minlength') ||
+                  telefonoProveedor?.hasError('maxlength')
+                "
+              >
+                Requiere 10 numeros
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="half-width">
+              <mat-label>Celular</mat-label>
+              <input
+                matInput
+                formControlName="celular"
+                [value]="celularProveedor?.value | removeSpaces | numeric"
+              />
+              <mat-error
+                *ngIf="
+                  celularProveedor?.hasError('minlength') ||
+                  celularProveedor?.hasError('maxlength')
+                "
+              >
+                Requiere 10 numeros
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <!-- Fila 2 -->
+          <div class="form-row">
+            <mat-form-field class="full-width">
+              <mat-label>Direccion</mat-label>
+              <input
+                matInput
+                formControlName="direccion"
+                [value]="direccionProveedor?.value | ajustarTexto"
+              />
+              <mat-error *ngIf="direccionProveedor?.hasError('required')"
+                >Campo requerido</mat-error
+              >
+            </mat-form-field>
+
+            <mat-form-field class="full-width">
+              <mat-label>Email</mat-label>
+              <input matInput formControlName="email" />
+              <mat-error
+                *ngIf="
+                  emailProveedor?.hasError('required') && !emailProveedor?.value
+                "
+              >
+                Campo requerido
+              </mat-error>
+              <mat-error
+                *ngIf="
+                  emailProveedor?.hasError('email') ||
+                  emailProveedor?.hasError('customEmailFormat')
+                "
+              >
+                Email no válido
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- *************************************************************************************************** -->
+  <!-- ****************************************detalleCompra********************************************** -->
+  <!-- *************************************************************************************************** -->
+
+  <h2>Detalle de Compras</h2>
+
+  <mat-card>
+    <mat-card-content>
+      <ng-container formArrayName="detalleCompra" class="compra-form-row">
+        <ng-container
+          *ngFor="let compra of detalleCompra.controls; let i = index"
+        >
+          <div class="compra-form-row" [formGroupName]="i">
+            <mat-form-field class="half-width">
+              <mat-label>Producto</mat-label>
+              <mat-select
+                formControlName="productoId"
+                (selectionChange)="onProductoSelected($event)"
+              >
+                <mat-option *ngFor="let item of productos" [value]="item.id">{{
+                  item.nombre
+                }}</mat-option>
+              </mat-select>
+
+              <mat-error *ngIf="compra.get('productoId')?.hasError('required')">
+                Campo requerido
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Cantidad</mat-label>
+              <input
+                matInput
+                formControlName="cantidad"
+                placeholder="Cantidad"
+              />
+              <mat-error *ngIf="compra.get('cantidad')?.hasError('required')">
+                Campo requerido
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Costo</mat-label>
+              <input
+                matInput
+                formControlName="costo"
+                type="number"
+                placeholder="0"
+                class="right-align"
+              />
+              <span matTextPrefix>$&nbsp;</span>
+              <mat-error *ngIf="compra.get('costo')?.hasError('required')">
+                Campo requerido
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="venta">
+              <mat-label>Venta</mat-label>
+              <input
+                matInput
+                formControlName="venta"
+                type="number"
+                placeholder="0"
+                class="right-align"
+              />
+              <span matTextPrefix>$&nbsp;</span>
+              <mat-error *ngIf="compra.get('venta')?.hasError('required')">
+                Campo requerido
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Total</mat-label>
+              <input
+                matInput
+                formControlName="total"
+                type="number"
+                placeholder="0"
+                class="right-align"
+              />
+              <span matTextPrefix>$&nbsp;</span>
+              <mat-error *ngIf="compra.get('cantidad')?.hasError('required')">
+                Campo requerido
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="visible">
+              <mat-label>UsuarioModif</mat-label>
+              <input
+                matInput
+                formControlName="usuarioModif"
+                placeholder="Usuario Modif"
+              />
+              <mat-error *ngIf="compra.get('cantidad')?.hasError('required')">
+                Campo requerido
+              </mat-error>
+            </mat-form-field>
+
+            <button mat-fab color="warn" (click)="removeCompra(i)">
+              <mat-icon>delete_forever</mat-icon>
+            </button>
+          </div>
+        </ng-container>
+
+        <button
+          mat-mini-fab
+          color="primary"
+          type="button"
+          (click)="addCompra()"
+        >
+          <mat-icon class="add-course-btn">add</mat-icon>
+        </button>
+      </ng-container>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- *************************************************************************************************** -->
+  <!-- ****************************************Valor Factura********************************************** -->
+  <!-- *************************************************************************************************** -->
+
+  <h2>Valor Factura</h2>
+
+  <mat-card>
+    <mat-card-header>
+      <!-- <mat-card-title>Proveedor</mat-card-title> -->
+    </mat-card-header>
+
+    <mat-card-content class="valor-factura">
+      <div>
+        <mat-form-field class="half-width">
+          <mat-label>Valor</mat-label>
+          <input matInput formControlName="valor" class="right-align" />
+          <span matTextPrefix>$&nbsp;</span>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field class="half-width">
+          <mat-label>Descuento</mat-label>
+          <input matInput formControlName="descuento" class="right-align" />
+          <span matTextPrefix>$&nbsp;</span>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field class="half-width">
+          <mat-label>Subtotal</mat-label>
+          <input matInput formControlName="subtotal" class="right-align" />
+          <span matTextPrefix>$&nbsp;</span>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field class="half-width">
+          <mat-label>Total</mat-label>
+          <input matInput formControlName="total" class="right-align" />
+          <span matTextPrefix>$&nbsp;</span>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field class="half-width">
+          <mat-label>Abono</mat-label>
+          <input matInput formControlName="abono" class="right-align" />
+          <span matTextPrefix>$&nbsp;</span>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field class="half-width">
+          <mat-label>Saldo</mat-label>
+          <input matInput formControlName="saldo" class="right-align" />
+          <span matTextPrefix>$&nbsp;</span>
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Botón para enviar el formulario principal -->
+  <div style="margin-top: 10px">
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="form.invalid || detalleCompra.length === 0"
+    >
+      Guardar
+    </button>
+  </div>
+</form>

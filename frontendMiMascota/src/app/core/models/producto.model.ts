@@ -1,3 +1,6 @@
+import { CategoriaModel } from './categoria.model';
+import { MarcaModel } from './marca.model';
+
 export interface ProductoModel {
   id: number;
   marcaId: number;
@@ -9,18 +12,8 @@ export interface ProductoModel {
   fechaNow: string;
   imagenUrl: string;
   usuarioModif: string;
-  marca: {
-    id: number;
-    nombre: string;
-    descripcion: string;
-    usuarioModif: string;
-  };
-  categoria: {
-    id: number;
-    nombre: string;
-    descripcion: string;
-    usuarioModif: string;
-  };
+  marca: MarcaModel;
+  categoria: CategoriaModel;
   marcaNombre?: string; // Agregar esta línea
   categoriaNombre?: string; // Agregar esta línea
 }

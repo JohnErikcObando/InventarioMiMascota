@@ -1,8 +1,8 @@
-import { RemoveSpacesPipePipe } from './remove-spaces-pipe.pipe';
+import { RemoveSpacesPipe } from './remove-spaces.pipe';
 
 describe('RemoveSpacesPipePipe', () => {
   it('create an instance', () => {
-    const pipe = new RemoveSpacesPipePipe();
+    const pipe = new RemoveSpacesPipe();
     expect(pipe).toBeTruthy();
   });
 });

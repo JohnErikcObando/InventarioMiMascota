@@ -128,7 +128,7 @@ export class DialogFromProductoComponent {
       categoriaId: ['', [Validators.required]],
       codigo: [''],
       descripcion: [''],
-      valor: ['0', [Validators.required]],
+      valor: ['', [Validators.required]],
       usuarioModif: ['MiMascota'],
     });
   }

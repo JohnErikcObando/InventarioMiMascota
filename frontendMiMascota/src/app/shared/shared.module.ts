@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AjustarTextoPipe } from './pipes/ajustar-texto.pipe';
-import { RemoveSpacesPipe } from './pipes/remove-spaces-pipe.pipe';
+import { RemoveSpacesPipe } from './pipes/remove-spaces.pipe';
+import { NumericPipe } from './pipes/numeric.pipe';
 
 @NgModule({
-  declarations: [AjustarTextoPipe, RemoveSpacesPipe],
+  declarations: [AjustarTextoPipe, RemoveSpacesPipe, NumericPipe],
   imports: [CommonModule],
-  exports: [AjustarTextoPipe, RemoveSpacesPipe],
+  exports: [AjustarTextoPipe, RemoveSpacesPipe, NumericPipe],
 })
 export class SharedModule {}

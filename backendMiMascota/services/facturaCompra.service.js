@@ -73,6 +73,7 @@ class FacturaCompraService {
       include: [
         { model: models.Caja, as: 'caja' },
         { model: models.Proveedor, as: 'proveedor' },
+        { model: models.FormaPago, as: 'forma_pago' },
         { model: models.Compra, as: 'compra' },
       ],
     });

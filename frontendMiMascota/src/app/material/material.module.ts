@@ -16,6 +16,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [],
@@ -35,6 +40,12 @@ import { MatTableModule } from '@angular/material/table';
     MatDialogModule,
     MatPaginatorModule,
     MatTableModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatNativeDateModule,
+    MatAutocompleteModule,
+    MatCheckboxModule,
+    MatSortModule,
   ],
   exports: [
     MatToolbarModule,
@@ -51,6 +62,12 @@ import { MatTableModule } from '@angular/material/table';
     MatDialogModule,
     MatPaginatorModule,
     MatTableModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatNativeDateModule,
+    MatAutocompleteModule,
+    MatCheckboxModule,
+    MatSortModule,
   ],
 })
 export class MaterialModule {}

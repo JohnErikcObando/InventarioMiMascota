@@ -56,3 +56,16 @@
   background-color: white;
   z-index: 1; /* Asegúrate de que el encabezado esté en capa superior */
 }
+
+.right-align {
+  text-align: right;
+}
+
+input.right-align::-webkit-outer-spin-button,
+input.right-align::-webkit-inner-spin-button {
+  display: none;
+}
+
+input.right-align {
+  -moz-appearance: textfield;
+}

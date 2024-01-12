@@ -1,0 +1,83 @@
+.full-width-container {
+  width: 90%;
+  margin: auto;
+}
+
+.date-nro-factura {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.date-nro-factura mat-form-field {
+  width: calc(48% - 10px); /* Ajusta según sea necesario */
+  margin-bottom: 10px;
+}
+
+.info-proveedor-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.proveedor-column {
+  width: calc(48% - 10px); /* Ajusta según sea necesario */
+  margin-right: 20px;
+}
+
+@media (max-width: 767px) {
+  .date-nro-factura mat-form-field {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .info-proveedor-row,
+  .compra-form-row {
+    flex-direction: column;
+  }
+
+  .proveedor-column {
+    width: 100%;
+    margin-right: 0;
+  }
+}
+
+.half-width {
+  width: 23%; /* Ajusta según sea necesario para el ancho de cada campo en la primera fila */
+  margin-right: 2%; /* Agrega un pequeño margen entre los campos */
+}
+
+.full-width {
+  width: 48%;
+  margin-right: 2%; /* Ajusta según sea necesario para el ancho completo de la tarjeta en pantallas grandes */
+}
+
+.valor-factura {
+  text-align: right;
+}
+
+.compra-form-row mat-form-field {
+  margin-right: 16px; /* Ajusta el margen según tus preferencias */
+}
+
+.compra-form-row mat-form-field:last-child {
+  margin-right: 0; /* Elimina el margen del último campo */
+}
+
+.right-align {
+  text-align: right;
+}
+
+input.right-align::-webkit-outer-spin-button,
+input.right-align::-webkit-inner-spin-button {
+  display: none;
+}
+
+input.right-align {
+  -moz-appearance: textfield;
+}
+
+.visible {
+  display: none;
+}
+
