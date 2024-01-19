@@ -49,9 +49,6 @@
   <mat-form-field class="full-width">
     <mat-label>Descripción</mat-label>
     <input matInput formControlName="descripcion" />
-    <mat-error *ngIf="form.get('descripcion')?.hasError('required')"
-      >Campo requerido</mat-error
-    >
   </mat-form-field>
 
   <mat-form-field class="full-width">
@@ -79,7 +76,7 @@
           <div class="form-row">
             <mat-form-field class="half-width">
               <mat-label>Cedula</mat-label>
-              <input matInput formControlName="id" />
+              <input matInput formControlName="id" readonly />
               <mat-error *ngIf="idProveedor?.hasError('required')"
                 >Campo requerido</mat-error
               >
@@ -265,6 +262,7 @@
                 type="number"
                 placeholder="0"
                 class="right-align"
+                readonly
               />
               <span matTextPrefix>$&nbsp;</span>
               <mat-error *ngIf="compra.get('cantidad')?.hasError('required')">
@@ -316,7 +314,12 @@
       <div>
         <mat-form-field class="half-width">
           <mat-label>Valor</mat-label>
-          <input matInput formControlName="valor" class="right-align" />
+          <input
+            matInput
+            formControlName="valor"
+            class="right-align"
+            readonly
+          />
           <span matTextPrefix>$&nbsp;</span>
         </mat-form-field>
       </div>
@@ -326,13 +329,21 @@
           <mat-label>Descuento</mat-label>
           <input matInput formControlName="descuento" class="right-align" />
           <span matTextPrefix>$&nbsp;</span>
+          <mat-error *ngIf="form.get('descuento')?.hasError('required')"
+            >Campo requerido</mat-error
+          >
         </mat-form-field>
       </div>
 
       <div>
         <mat-form-field class="half-width">
           <mat-label>Subtotal</mat-label>
-          <input matInput formControlName="subtotal" class="right-align" />
+          <input
+            matInput
+            formControlName="subtotal"
+            class="right-align"
+            readonly
+          />
           <span matTextPrefix>$&nbsp;</span>
         </mat-form-field>
       </div>
@@ -340,7 +351,12 @@
       <div>
         <mat-form-field class="half-width">
           <mat-label>Total</mat-label>
-          <input matInput formControlName="total" class="right-align" />
+          <input
+            matInput
+            formControlName="total"
+            class="right-align"
+            readonly
+          />
           <span matTextPrefix>$&nbsp;</span>
         </mat-form-field>
       </div>
@@ -350,13 +366,21 @@
           <mat-label>Abono</mat-label>
           <input matInput formControlName="abono" class="right-align" />
           <span matTextPrefix>$&nbsp;</span>
+          <mat-error *ngIf="form.get('abono')?.hasError('required')"
+            >Campo requerido</mat-error
+          >
         </mat-form-field>
       </div>
 
       <div>
         <mat-form-field class="half-width">
           <mat-label>Saldo</mat-label>
-          <input matInput formControlName="saldo" class="right-align" />
+          <input
+            matInput
+            formControlName="saldo"
+            class="right-align"
+            readonly
+          />
           <span matTextPrefix>$&nbsp;</span>
         </mat-form-field>
       </div>
@@ -365,13 +389,6 @@
 
   <!-- Botón para enviar el formulario principal -->
   <div style="margin-top: 10px">
-    <button
-      mat-raised-button
-      color="primary"
-      type="submit"
-      [disabled]="form.invalid || detalleCompra.length === 0"
-    >
-      Guardar
-    </button>
+    <button mat-raised-button color="primary" type="submit">Guardar</button>
   </div>
 </form>

@@ -43,7 +43,7 @@ const AbonoFacturaVentaSchema = {
     type: DataTypes.FLOAT,
     defaultValue: 0,
   },
-  fechaNow: {
+  fecha_now: {
     allowNull: false,
     type: DataTypes.DATE,
     defaultValue: Sequelize.NOW,

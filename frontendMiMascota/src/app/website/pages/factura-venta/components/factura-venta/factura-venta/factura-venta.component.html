@@ -1,0 +1,428 @@
+<form
+  [formGroup]="form"
+  (ngSubmit)="save($event)"
+  class="full-width-container"
+  (keydown)="preventEnter($event)"
+>
+  <!-- Campos principales -->
+
+  <h2>Factura Venta</h2>
+
+  <mat-card>
+    <mat-card-header>
+      <!-- <mat-card-title>Proveedor</mat-card-title> -->
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-form-field class="half-width">
+        <mat-label>Fecha</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker"
+          [formControl]="date"
+          formControlName="fecha"
+        />
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="form.get('fecha')?.hasError('required')"
+          >Campo requerido</mat-error
+        >
+      </mat-form-field>
+
+      <mat-form-field class="half-width">
+        <mat-label>Caja</mat-label>
+        <mat-select formControlName="cajaId">
+          <mat-option *ngFor="let caja of cajas" [value]="caja.id">
+            {{ caja.nombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="half-width">
+        <mat-label>Forma Pago</mat-label>
+        <mat-select formControlName="formaPagoId">
+          <mat-option
+            *ngFor="let formaPago of formasPago"
+            [value]="formaPago.id"
+          >
+            {{ formaPago.nombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Campo de búsqueda -->
+      <mat-form-field class="small-width">
+        <mat-label>Buscar Fact</mat-label>
+        <input
+          matInput
+          formControlName="buscarFactura"
+          placeholder="No. Factura"
+        />
+      </mat-form-field>
+
+      <button
+        mat-mini-fab
+        color="primary"
+        type="button"
+        (click)="buscarFactura()"
+      >
+        <mat-icon class="add-course-btn">search</mat-icon>
+      </button>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- *************************************************************************************************** -->
+  <!-- **************************************Cliente Factura********************************************* -->
+  <!-- *************************************************************************************************** -->
+
+  <h2>Info Cliente</h2>
+  <div formGroupName="clienteFactura">
+    <div class="modal-container">
+      <mat-card>
+        <mat-card-header>
+          <!-- <mat-card-title>Proveedor</mat-card-title> -->
+        </mat-card-header>
+
+        <mat-card-content class="card-content-container">
+          <!-- Fila 1 -->
+          <div class="form-row">
+            <mat-form-field class="half-width">
+              <mat-label>Cedula</mat-label>
+              <input matInput formControlName="id" readonly />
+              <mat-error *ngIf="idCliente?.hasError('required')"
+                >Campo requerido</mat-error
+              >
+              <mat-error *ngIf="idCliente?.hasError('not_available')"
+                >La cedula ya existe</mat-error
+              >
+            </mat-form-field>
+
+            <mat-form-field class="half-width">
+              <mat-label>Nombre</mat-label>
+              <input
+                matInput
+                formControlName="nombre"
+                [matAutocomplete]="auto"
+                [value]="nombreCliente?.value | ajustarTexto"
+              />
+              <mat-autocomplete
+                #auto="matAutocomplete"
+                (optionSelected)="selectCliente($event.option.value)"
+              >
+                <mat-option
+                  *ngFor="let cliente of clientesFiltrados"
+                  [value]="cliente"
+                >
+                  {{ cliente.nombre }}
+                </mat-option>
+              </mat-autocomplete>
+              <mat-error *ngIf="nombreCliente?.hasError('required')"
+                >Campo requerido</mat-error
+              >
+            </mat-form-field>
+
+            <mat-form-field class="half-width">
+              <mat-label>Apellido</mat-label>
+              <input
+                matInput
+                formControlName="apellido"
+                [value]="apellidoCliente?.value | ajustarTexto"
+              />
+
+              <mat-error *ngIf="apellidoCliente?.hasError('required')"
+                >Campo requerido</mat-error
+              >
+            </mat-form-field>
+
+            <div class="form-row">
+              <mat-form-field class="half-width">
+                <mat-label>Telefono</mat-label>
+                <input
+                  matInput
+                  formControlName="telefono"
+                  [value]="telefonoCliente?.value | removeSpaces | numeric"
+                />
+                <mat-error
+                  *ngIf="
+                    telefonoCliente?.hasError('minlength') ||
+                    telefonoCliente?.hasError('maxlength')
+                  "
+                >
+                  Requiere 10 numeros
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field class="half-width">
+                <mat-label>Celular</mat-label>
+                <input
+                  matInput
+                  formControlName="celular"
+                  [value]="celularCliente?.value | removeSpaces | numeric"
+                />
+                <mat-error
+                  *ngIf="
+                    celularCliente?.hasError('minlength') ||
+                    celularCliente?.hasError('maxlength')
+                  "
+                >
+                  Requiere 10 numeros
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- Fila 2 -->
+          <div class="form-row">
+            <mat-form-field class="full-width">
+              <mat-label>Direccion</mat-label>
+              <input
+                matInput
+                formControlName="direccion"
+                [value]="direccionCliente?.value | ajustarTexto"
+              />
+              <mat-error *ngIf="direccionCliente?.hasError('required')"
+                >Campo requerido</mat-error
+              >
+            </mat-form-field>
+
+            <mat-form-field class="full-width">
+              <mat-label>Email</mat-label>
+              <input matInput formControlName="email" />
+              <mat-error
+                *ngIf="
+                  emailCliente?.hasError('required') && !emailCliente?.value
+                "
+              >
+                Campo requerido
+              </mat-error>
+              <mat-error
+                *ngIf="
+                  emailCliente?.hasError('email') ||
+                  emailCliente?.hasError('customEmailFormat')
+                "
+              >
+                Email no válido
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- *************************************************************************************************** -->
+  <!-- ****************************************detalleVenta********************************************** -->
+  <!-- *************************************************************************************************** -->
+
+  <h2>Detalle de Ventas</h2>
+
+  <mat-card>
+    <mat-card-content>
+      <ng-container formArrayName="detalleVenta" class="compra-form-row">
+        <ng-container
+          *ngFor="let compra of detalleVenta.controls; let i = index"
+        >
+          <div class="compra-form-row" [formGroupName]="i">
+            <mat-form-field class="half-width">
+              <mat-label>Producto</mat-label>
+              <mat-select
+                formControlName="productoId"
+                (selectionChange)="onProductoSelected($event)"
+              >
+                <mat-option *ngFor="let item of productos" [value]="item.id">{{
+                  item.nombre
+                }}</mat-option>
+              </mat-select>
+
+              <mat-error *ngIf="compra.get('productoId')?.hasError('required')">
+                Campo requerido
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="small-width">
+              <mat-label>Cantidad</mat-label>
+              <input
+                matInput
+                formControlName="cantidad"
+                placeholder="1"
+                type="number"
+              />
+              <mat-error *ngIf="compra.get('cantidad')?.hasError('required')">
+                Campo requerido
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Valor</mat-label>
+              <input
+                matInput
+                formControlName="valor"
+                type="number"
+                placeholder="0"
+                class="right-align"
+              />
+              <span matTextPrefix>$&nbsp;</span>
+              <mat-error *ngIf="compra.get('valor')?.hasError('required')">
+                Campo requerido
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Total</mat-label>
+              <input
+                matInput
+                formControlName="total"
+                type="number"
+                placeholder="0"
+                class="right-align"
+                readonly
+              />
+              <span matTextPrefix>$&nbsp;</span>
+              <mat-error *ngIf="compra.get('cantidad')?.hasError('required')">
+                Campo requerido
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="visible">
+              <mat-label>UsuarioModif</mat-label>
+              <input
+                matInput
+                formControlName="usuarioModif"
+                placeholder="Usuario Modif"
+              />
+              <mat-error *ngIf="compra.get('cantidad')?.hasError('required')">
+                Campo requerido
+              </mat-error>
+            </mat-form-field>
+
+            <button mat-fab color="warn" (click)="removeVenta(i)">
+              <mat-icon>delete_forever</mat-icon>
+            </button>
+          </div>
+        </ng-container>
+
+        <button mat-mini-fab color="primary" type="button" (click)="addVenta()">
+          <mat-icon class="add-course-btn">add</mat-icon>
+        </button>
+      </ng-container>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- *************************************************************************************************** -->
+  <!-- ****************************************Valor Factura********************************************** -->
+  <!-- *************************************************************************************************** -->
+
+  <h2>Valor Factura</h2>
+
+  <mat-card>
+    <mat-card-header>
+      <!-- <mat-card-title>Proveedor</mat-card-title> -->
+    </mat-card-header>
+
+    <mat-card-content class="valor-factura-container">
+      <div class="valor-factura-column">
+        <mat-form-field class="full-width">
+          <mat-label>Descripción</mat-label>
+          <textarea matInput formControlName="descripcion"></textarea>
+        </mat-form-field>
+
+        <mat-checkbox class="half-width" formControlName="anulado"
+          >Anulado</mat-checkbox
+        >
+
+        <button
+          class="half-width"
+          mat-raised-button
+          color="primary"
+          type="button"
+        >
+          Abono
+        </button>
+      </div>
+
+      <!-- Columna 2: Campos de Valor -->
+      <div class="valor-factura-column">
+        <div>
+          <mat-form-field class="full-width">
+            <mat-label>Valor</mat-label>
+            <input
+              matInput
+              formControlName="valor"
+              class="right-align"
+              readonly
+            />
+            <span matTextPrefix>$&nbsp;</span>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field class="full-width">
+            <mat-label>Descuento</mat-label>
+            <input matInput formControlName="descuento" class="right-align" />
+            <span matTextPrefix>$&nbsp;</span>
+            <mat-error *ngIf="form.get('descuento')?.hasError('required')"
+              >Campo requerido</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field class="full-width">
+            <mat-label>Subtotal</mat-label>
+            <input
+              matInput
+              formControlName="subtotal"
+              class="right-align"
+              readonly
+            />
+            <span matTextPrefix>$&nbsp;</span>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field class="full-width">
+            <mat-label>Total</mat-label>
+            <input
+              matInput
+              formControlName="total"
+              class="right-align"
+              readonly
+            />
+            <span matTextPrefix>$&nbsp;</span>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field class="full-width">
+            <mat-label>Abono</mat-label>
+            <input matInput formControlName="abono" class="right-align" />
+            <span matTextPrefix>$&nbsp;</span>
+            <mat-error *ngIf="form.get('abono')?.hasError('required')"
+              >Campo requerido</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field class="full-width">
+            <mat-label>Saldo</mat-label>
+            <input
+              matInput
+              formControlName="saldo"
+              class="right-align"
+              readonly
+            />
+            <span matTextPrefix>$&nbsp;</span>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Botón para enviar el formulario principal -->
+  <div style="margin-top: 10px">
+    <button mat-raised-button color="primary" type="submit">Guardar</button>
+  </div>
+</form>

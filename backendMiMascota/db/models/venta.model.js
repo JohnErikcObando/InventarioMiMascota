@@ -48,6 +48,13 @@ const VentaSchema = {
     type: DataTypes.FLOAT,
     defaultValue: 0,
   },
+
+  total: {
+    allowNull: false,
+    type: DataTypes.FLOAT,
+    defaultValue: 0,
+  },
+
   fechaNow: {
     allowNull: false,
     type: DataTypes.DATE,

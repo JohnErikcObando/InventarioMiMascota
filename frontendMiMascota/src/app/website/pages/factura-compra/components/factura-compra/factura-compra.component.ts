@@ -17,9 +17,7 @@ import { Sweetalert2Service } from 'src/app/shared/services/sweetalert2.service'
 import { FacturaCompraService } from 'src/app/core/services/factura-compra.service';
 import { ProductoModel } from 'src/app/core/models/producto.model';
 import { ProductoService } from 'src/app/core/services/producto.service';
-import { MatTableDataSource } from '@angular/material/table';
-import { CompraModel } from 'src/app/core/models/compra.model';
-import { startWith, switchMap } from 'rxjs';
+import { startWith } from 'rxjs';
 import { MatSelectChange } from '@angular/material/select';
 
 @Component({
@@ -62,10 +60,9 @@ export class FacturaCompraComponent {
     this.getAllCajas();
     this.getAllFormasPago();
     this.getAllProductos();
-
     this.valueChangesCampos();
-
     this.findProveedor();
+    this.addCompra();
   }
 
   save(event: MouseEvent) {
@@ -111,13 +108,13 @@ export class FacturaCompraComponent {
     return this.formBuilder.group({
       cajaId: [1, Validators.required],
       formaPagoId: [1, Validators.required],
-      fecha: ['', Validators.required],
-      valor: [{ value: '', disabled: true }, Validators.required],
-      descuento: [0],
-      subtotal: [{ value: '', disabled: true }, Validators.required],
-      total: [{ value: '', disabled: true }, Validators.required],
-      abono: ['0', Validators.required],
-      saldo: [{ value: '', disabled: true }, Validators.required],
+      fecha: [new Date(), Validators.required],
+      valor: [0, Validators.required],
+      descuento: [0, Validators.required],
+      subtotal: [0, Validators.required],
+      total: [0, Validators.required],
+      abono: [0, Validators.required],
+      saldo: [0, Validators.required],
       anulado: [false],
       descripcion: [''],
       imagenUrl: ['', Validators.required],
@@ -147,7 +144,7 @@ export class FacturaCompraComponent {
       cantidad: [1, Validators.required],
       costo: ['', Validators.required],
       venta: ['', Validators.required],
-      total: [{ value: '', disabled: true }, Validators.required],
+      total: [0, Validators.required],
       usuarioModif: ['MiMascota'],
     });
 

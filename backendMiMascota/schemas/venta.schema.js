@@ -5,6 +5,7 @@ const facturaVentaId = Joi.string();
 const productoId = Joi.number().integer().required();
 const cantidad = Joi.number().integer().required();
 const valor = Joi.number().required();
+const total = Joi.number().required();
 const fechaNow = Joi.date();
 const usuarioModif = Joi.string().required();
 
@@ -13,6 +14,7 @@ const CreateVentaSchema = Joi.object({
   productoId,
   cantidad,
   valor,
+  total,
   fechaNow,
   usuarioModif,
 });
@@ -22,6 +24,7 @@ const UpdateVentaSchema = Joi.object({
   productoId,
   cantidad,
   valor,
+  total,
   fechaNow,
   usuarioModif,
 });

@@ -1,3 +1,4 @@
+import { FacturaVentaModule } from './factura-venta/factura-venta.module';
 import { CategoriaModule } from './categoria/categoria.module';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -80,6 +81,13 @@ const routes: Routes = [
         loadChildren: () =>
           import('./factura-compra/factura-compra.module').then(
             (m) => FacturaCompraModule
+          ),
+      },
+      {
+        path: 'facturaVenta',
+        loadChildren: () =>
+          import('./factura-venta/factura-venta.module').then(
+            (m) => FacturaVentaModule
           ),
       },
     ],

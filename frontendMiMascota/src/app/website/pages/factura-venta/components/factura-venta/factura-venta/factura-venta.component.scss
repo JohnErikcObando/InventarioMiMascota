@@ -1,0 +1,98 @@
+h2 {
+  margin-top: 10px;
+}
+.full-width-container {
+  width: 90%;
+  margin: auto;
+}
+
+.date-nro-factura {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.date-nro-factura mat-form-field {
+  width: calc(48% - 10px); /* Ajusta según sea necesario */
+  margin-bottom: 10px;
+}
+
+@media (max-width: 767px) {
+  .date-nro-factura mat-form-field {
+    width: 100%;
+    margin-right: 0;
+  }
+}
+
+.small-width {
+  width: 15%; /* Ajusta según sea necesario para el ancho de cada campo en la primera fila */
+  margin-right: 2%;
+}
+
+.half-width {
+  width: 23%; /* Ajusta según sea necesario para el ancho de cada campo en la primera fila */
+  margin-right: 2%; /* Agrega un pequeño margen entre los campos */
+}
+
+.full-width {
+  width: 48%;
+  margin-right: 2%; /* Ajusta según sea necesario para el ancho completo de la tarjeta en pantallas grandes */
+}
+
+.valor-factura {
+  text-align: right;
+}
+
+.compra-form-row mat-form-field {
+  margin-right: 16px; /* Ajusta el margen según tus preferencias */
+}
+
+.compra-form-row mat-form-field:last-child {
+  margin-right: 0; /* Elimina el margen del último campo */
+}
+
+.right-align {
+  text-align: right;
+}
+
+input.right-align::-webkit-outer-spin-button,
+input.right-align::-webkit-inner-spin-button {
+  display: none;
+}
+
+input.right-align {
+  -moz-appearance: textfield;
+}
+
+.visible {
+  display: none;
+}
+
+.full-width-container {
+  width: 90%;
+  margin: auto;
+}
+
+/* ... Otros estilos existentes ... */
+
+.valor-factura-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.valor-factura-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 48%; /* Ajusta según sea necesario */
+}
+
+/* Estilos adicionales para ajustar la alineación de los campos dentro de las columnas */
+.valor-factura-column div {
+  width: 100%; /* Ajusta según sea necesario */
+  display: flex;
+  justify-content: flex-end; /* Alinea los campos a la derecha en la Columna 1 */
+  margin-bottom: 10px; /* Ajusta según sea necesario */
+}
+
+/* ... Otros estilos existentes ... */
