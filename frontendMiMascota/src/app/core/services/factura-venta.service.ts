@@ -43,7 +43,7 @@ export class FacturaVentaService {
     return this.http.get<FacturaVentaModel[]>(this.apiUrl);
   }
 
-  get(id: number) {
+  get(id: string) {
     return this.http.get<FacturaVentaModel>(`${this.apiUrl}/${id}`).pipe(
       catchError((error: HttpErrorResponse) => {
         // Manejo de errores

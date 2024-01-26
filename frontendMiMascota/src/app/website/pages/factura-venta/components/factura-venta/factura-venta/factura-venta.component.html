@@ -21,6 +21,7 @@
           [matDatepicker]="picker"
           [formControl]="date"
           formControlName="fecha"
+          [readonly]="readOnlyMode.value"
         />
         <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle
@@ -255,7 +256,7 @@
                 Campo requerido
               </mat-error>
             </mat-form-field>
-            <mat-form-field appearance="fill">
+            <mat-form-field appearance="fill" class="small-width">
               <mat-label>Valor</mat-label>
               <input
                 matInput
@@ -270,7 +271,7 @@
               </mat-error>
             </mat-form-field>
 
-            <mat-form-field appearance="fill">
+            <mat-form-field appearance="fill" class="small-width">
               <mat-label>Total</mat-label>
               <input
                 matInput
@@ -297,13 +298,24 @@
               </mat-error>
             </mat-form-field>
 
-            <button mat-fab color="warn" (click)="removeVenta(i)">
+            <button
+              mat-fab
+              color="warn"
+              *ngIf="!busquedaExitosa"
+              (click)="removeVenta(i)"
+            >
               <mat-icon>delete_forever</mat-icon>
             </button>
           </div>
         </ng-container>
 
-        <button mat-mini-fab color="primary" type="button" (click)="addVenta()">
+        <button
+          mat-mini-fab
+          color="primary"
+          type="button"
+          *ngIf="!busquedaExitosa"
+          (click)="addVenta()"
+        >
           <mat-icon class="add-course-btn">add</mat-icon>
         </button>
       </ng-container>
@@ -337,6 +349,8 @@
           mat-raised-button
           color="primary"
           type="button"
+          (click)="addAbono()"
+          [disabled]="!busquedaExitosa || saldoFactura() <= 0"
         >
           Abono
         </button>
@@ -423,6 +437,13 @@
 
   <!-- Botón para enviar el formulario principal -->
   <div style="margin-top: 10px">
-    <button mat-raised-button color="primary" type="submit">Guardar</button>
+    <button
+      mat-raised-button
+      color="primary"
+      *ngIf="!busquedaExitosa"
+      type="submit"
+    >
+      Guardar
+    </button>
   </div>
 </form>

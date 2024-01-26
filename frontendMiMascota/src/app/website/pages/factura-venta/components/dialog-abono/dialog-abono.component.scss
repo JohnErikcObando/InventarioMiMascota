@@ -1,0 +1,67 @@
+.modal-container {
+  /* Agrega estilos según sea necesario */
+  position: relative; /* Asegúrate de que position sea relative */
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
+}
+
+.card-content-container {
+  overflow-y: auto;
+  height: 500px;
+}
+
+.form-row {
+  display: flex;
+  align-items: flex-start;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.half-width {
+  width: 40%;
+}
+
+.small-width {
+  width: 23%;
+  margin-right: 2%; /* Ajusta según sea necesario para el ancho de cada campo en la primera fila */
+}
+
+.button-container {
+  position: sticky;
+  bottom: 0;
+  background-color: white;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+  padding: 16px;
+  box-shadow: 0px -5px 5px -5px rgba(0, 0, 0, 0.2); /* Agrega sombra debajo del contenedor de botones */
+}
+
+.button-row {
+  margin: 8px 8px 8px 0;
+}
+
+.button-row {
+  display: table-cell;
+  max-width: 600px;
+}
+
+.mat-card {
+  margin-bottom: 0; /* Evita el espacio adicional debajo del card */
+}
+
+.mat-card-header {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 1; /* Asegúrate de que el encabezado esté en capa superior */
+}
+
+.table-container {
+  overflow: auto;
+  max-height: 250px;
+  width: 100%; /* Ajusta la altura máxima de la tabla según tus necesidades */
+}

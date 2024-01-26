@@ -23,6 +23,17 @@ class AbonoFacturaService {
     return AbonoFacturaVenta;
   }
 
+  async findByFacturaVentaId(facturaVentaId) {
+    const AbonoFacturaVenta = await models.AbonoFacturaVenta.findAll({
+      where: { facturaVentaId },
+      include: [{ model: models.FormaPago, as: 'forma_pago' }],
+    });
+    if (!AbonoFacturaVenta) {
+      throw boom.notFound('AbonoFacturaVenta not found');
+    }
+    return AbonoFacturaVenta;
+  }
+
   async update(id, changes) {
     const AbonoFacturaVenta = await this.findOne(id);
     const rta = await AbonoFacturaVenta.update(changes);

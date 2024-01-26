@@ -1,1 +1,179 @@
-<p>dialog-abono works!</p>
+<form [formGroup]="form" (ngSubmit)="save($event)" class="mobile-form">
+  <div class="modal-container">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Abono Factura Venta</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content class="card-content-container">
+        <div class="form-row">
+          <mat-form-field class="small-width">
+            <mat-label>Factura</mat-label>
+            <input matInput formControlName="facturaVentaId" readonly />
+            <mat-error *ngIf="form.get('prefijo')?.hasError('required')"
+              >Campo requerido</mat-error
+            >
+          </mat-form-field>
+
+          <mat-form-field class="small-width">
+            <mat-label>Fecha</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              [formControl]="date"
+              formControlName="fecha"
+            />
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle
+              matIconSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="form.get('fecha')?.hasError('required')"
+              >Campo requerido</mat-error
+            >
+          </mat-form-field>
+
+          <mat-form-field class="small-width">
+            <mat-label>Forma Pago</mat-label>
+            <mat-select formControlName="formaPagoId">
+              <mat-option
+                *ngFor="let formaPago of formasPago"
+                [value]="formaPago.id"
+              >
+                {{ formaPago.nombre }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="small-width">
+            <mat-label>Valor</mat-label>
+            <input matInput formControlName="valor" class="right-align" />
+            <span matTextPrefix>$&nbsp;</span>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field class="half-width">
+            <mat-label>Descripción</mat-label>
+            <textarea
+              matInput
+              formControlName="descripcion"
+              [value]="descripcion?.value | ajustarTexto"
+            ></textarea>
+            <mat-error *ngIf="descripcion && descripcion.hasError('maxlength')"
+              >Máximo 500 caracteres</mat-error
+            >
+          </mat-form-field>
+
+          <mat-checkbox class="half-width" formControlName="anulado"
+            >Anulado</mat-checkbox
+          >
+
+          <button
+            class="button-row"
+            mat-raised-button
+            type="submit"
+            [disabled]="form.invalid"
+            color="primary"
+          >
+            {{ botonAccion }}
+          </button>
+        </div>
+
+        <div>
+          <h2>Lista de Pagos</h2>
+          <div class="table-container">
+            <table
+              mat-table
+              [dataSource]="dataSource"
+              class="table"
+              tabindex="0"
+            >
+              <!-- fecha Column -->
+              <ng-container matColumnDef="fecha">
+                <th mat-header-cell *matHeaderCellDef>Fecha</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.fecha | formatFecha }}
+                </td>
+                <td mat-footer-cell *matFooterCellDef></td>
+              </ng-container>
+
+              <!-- recibo Column -->
+              <ng-container matColumnDef="recibo">
+                <th mat-header-cell *matHeaderCellDef>Recibo</th>
+                <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+                <td mat-footer-cell *matFooterCellDef></td>
+              </ng-container>
+
+              <!-- forma pago Column -->
+              <ng-container matColumnDef="formaPago">
+                <th mat-header-cell *matHeaderCellDef>Forma Pago</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.forma_pago.nombre }}
+                </td>
+                <td mat-footer-cell *matFooterCellDef>Total</td>
+              </ng-container>
+
+              <!-- valor Column -->
+              <ng-container matColumnDef="valor">
+                <th mat-header-cell *matHeaderCellDef>Valor</th>
+                <td mat-cell *matCellDef="let element">{{ element.valor }}</td>
+                <td mat-footer-cell *matFooterCellDef>
+                  {{ getTotalCost() }}
+                </td>
+              </ng-container>
+
+              <!-- descripcion Column -->
+              <ng-container matColumnDef="descripcion">
+                <th mat-header-cell *matHeaderCellDef>Descripcion</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.descripcion }}
+                </td>
+                <td mat-footer-cell *matFooterCellDef></td>
+              </ng-container>
+
+              <!-- anulado Column -->
+              <ng-container matColumnDef="anulado">
+                <th mat-header-cell *matHeaderCellDef>Anulado</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.anulado }}
+                </td>
+                <td mat-footer-cell *matFooterCellDef></td>
+              </ng-container>
+
+              <tr
+                mat-header-row
+                *matHeaderRowDef="displayedColumns; sticky: true"
+              ></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+              <tr
+                mat-footer-row
+                *matFooterRowDef="displayedColumns; sticky: true"
+              ></tr>
+            </table>
+          </div>
+
+          <!-- <mat-paginator
+            [pageSizeOptions]="[5]"
+            showFirstLastButtons
+            aria-label="Select page of periodic elements"
+          >
+          </mat-paginator> -->
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions class="button-container">
+        <button
+          class="button-row"
+          mat-stroked-button
+          type="button"
+          color="Basic"
+          (click)="cerrarDialog()"
+        >
+          Cerrar
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</form>

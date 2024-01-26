@@ -29,4 +29,12 @@ export class Sweetalert2Service {
 
     return Swal.fire(confirmOptions);
   }
+
+  swalwarning(message: string) {
+    Swal.fire({
+      title: 'No Se encontro?',
+      text: message,
+      icon: 'warning',
+    });
+  }
 }

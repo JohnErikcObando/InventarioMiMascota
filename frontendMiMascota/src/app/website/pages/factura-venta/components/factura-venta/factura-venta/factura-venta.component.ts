@@ -18,6 +18,9 @@ import { FacturaVentaService } from 'src/app/core/services/factura-venta.service
 import { FormaPagoService } from 'src/app/core/services/forma-pago.service';
 import { ProductoService } from 'src/app/core/services/producto.service';
 import { Sweetalert2Service } from 'src/app/shared/services/sweetalert2.service';
+import { MyValidators } from 'src/app/utils/my-validators';
+import { DialogAbonoComponent } from '../../dialog-abono/dialog-abono.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-factura-venta',
@@ -28,13 +31,18 @@ export class FacturaVentaComponent {
   form: FormGroup;
   ventasFormArray: FormArray;
 
-  date = new FormControl(new Date());
-
   cajas: CajaModel[] = [];
   formasPago: FormaPagoModel[] = [];
   productos: ProductoModel[] = [];
   clientes: ClienteModel[] = [];
   clientesFiltrados: ClienteModel[] = [];
+
+  date = new FormControl(new Date());
+
+  numeroFactura: string = '';
+  busquedaExitosa: boolean = false;
+
+  readOnlyMode = new FormControl(true);
 
   constructor(
     private fb: FormBuilder,
@@ -43,7 +51,8 @@ export class FacturaVentaComponent {
     private formaPagoService: FormaPagoService,
     private productoService: ProductoService,
     private facturaVentaService: FacturaVentaService,
-    private sweetalert2Service: Sweetalert2Service
+    private sweetalert2Service: Sweetalert2Service,
+    private dialog: MatDialog
   ) {
     this.form = this.buildForm();
     this.ventasFormArray = this.fb.array([]);
@@ -107,12 +116,14 @@ export class FacturaVentaComponent {
   }
 
   buscarFactura() {
-    const numeroFactura = this.form.get('buscarFactura')?.value;
+    this.numeroFactura = this.form.get('buscarFactura')?.value;
 
     // Validación de que el campo de búsqueda no esté vacío
-    if (numeroFactura) {
+    if (this.numeroFactura) {
+      this.busquedaExitosa = true;
+
       // Llama al servicio para obtener la información de la factura
-      this.facturaVentaService.get(numeroFactura).subscribe(
+      this.facturaVentaService.get(this.numeroFactura).subscribe(
         (factura) => {
           // Rellena los campos del formulario con la información de la factura encontrada
 
@@ -154,17 +165,34 @@ export class FacturaVentaComponent {
             descripcion: factura.descripcion,
             usuarioModif: factura.usuarioModif,
           });
-          // ... Otros campos y lógica que necesites actualizar
+          // Establecer busquedaExitosa en true
         },
         (error) => {
-          console.error('Error al buscar la factura', error);
-          // Puedes mostrar un mensaje de error al usuario si la factura no se encuentra
+          console.error('Error al buscar la factura');
+
+          this.busquedaExitosa = false;
+          // this.resetForm();
+
+          this.sweetalert2Service.swalwarning(
+            'La factura no se encuentra en el sistema'
+          );
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
         }
       );
     }
   }
 
-  addAbono() {}
+  addAbono() {
+    MyValidators.setEstado('Guardar');
+    this.dialogAbono(this.numeroFactura);
+  }
+
+  saldoFactura(): number {
+    const saldo = this.form.get('saldo')?.value ?? 0;
+    return saldo;
+  }
 
   buildForm(): FormGroup {
     return this.fb.group({
@@ -196,16 +224,33 @@ export class FacturaVentaComponent {
     });
   }
 
+  // Función para restablecer el formulario
+  resetForm() {
+    this.form.reset(); // Esto restablecerá todos los campos a sus valores iniciales
+  }
+
   get detalleVenta(): FormArray {
     return this.form.get('detalleVenta') as FormArray;
   }
 
   addVenta() {
     const ventaForm = this.fb.group({
-      productoId: ['', Validators.required],
-      cantidad: [1, Validators.required],
-      valor: ['', Validators.required],
-      total: [0, Validators.required],
+      productoId: [
+        { value: '', disabled: this.busquedaExitosa },
+        Validators.required,
+      ],
+      cantidad: [
+        { value: 1, disabled: this.busquedaExitosa },
+        Validators.required,
+      ],
+      valor: [
+        { value: '', disabled: this.busquedaExitosa },
+        Validators.required,
+      ],
+      total: [
+        { value: 0, disabled: this.busquedaExitosa },
+        Validators.required,
+      ],
       usuarioModif: ['MiMascota'],
     });
 
@@ -343,6 +388,20 @@ export class FacturaVentaComponent {
   // Función para mostrar el nombre del clientes en el campo de entrada
   displayClientesName(cliente: ClienteModel | null): string {
     return cliente ? cliente.nombre : '';
+  }
+
+  dialogAbono(factura?: string) {
+    const dialogRef = this.dialog
+      .open(DialogAbonoComponent, {
+        disableClose: true,
+        data: factura || null,
+      })
+      .afterClosed()
+      .subscribe((resultado) => {
+        if (resultado === true) {
+          this.buscarFactura();
+        }
+      });
   }
 
   get cajaId() {

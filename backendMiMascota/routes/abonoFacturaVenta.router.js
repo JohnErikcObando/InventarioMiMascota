@@ -19,6 +19,17 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+router.get('/facturaVenta/:facturaVentaId', async (req, res, next) => {
+  try {
+    const { facturaVentaId } = req.params;
+    const AbonoFacturaVenta =
+      await service.findByFacturaVentaId(facturaVentaId);
+    res.json(AbonoFacturaVenta);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get(
   '/:id',
   validatorHandler(GetAbonoFacturaVentaSchema, 'params'),
