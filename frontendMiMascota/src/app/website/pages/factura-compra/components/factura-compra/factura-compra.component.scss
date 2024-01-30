@@ -42,6 +42,11 @@
   }
 }
 
+.small-width {
+  width: 15%; /* Ajusta según sea necesario para el ancho de cada campo en la primera fila */
+  margin-right: 2%; /* Agrega un pequeño margen entre los campos */
+}
+
 .half-width {
   width: 23%; /* Ajusta según sea necesario para el ancho de cada campo en la primera fila */
   margin-right: 2%; /* Agrega un pequeño margen entre los campos */
@@ -80,4 +85,3 @@ input.right-align {
 .visible {
   display: none;
 }
-

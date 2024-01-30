@@ -65,3 +65,28 @@
   max-height: 250px;
   width: 100%; /* Ajusta la altura máxima de la tabla según tus necesidades */
 }
+
+.saldo-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.saldo-label-value-container {
+  display: flex;
+  align-items: center;
+}
+
+.saldo-label {
+  margin-right: 5px;
+}
+
+.saldo-value {
+  font-size: 1.2em;
+  color: RED;
+}
+
+.h2-container {
+  text-align: right;
+}

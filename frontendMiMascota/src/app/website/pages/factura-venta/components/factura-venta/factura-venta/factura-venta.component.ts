@@ -186,7 +186,7 @@ export class FacturaVentaComponent {
 
   addAbono() {
     MyValidators.setEstado('Guardar');
-    this.dialogAbono(this.numeroFactura);
+    this.dialogAbono();
   }
 
   saldoFactura(): number {
@@ -390,18 +390,23 @@ export class FacturaVentaComponent {
     return cliente ? cliente.nombre : '';
   }
 
-  dialogAbono(factura?: string) {
-    const dialogRef = this.dialog
-      .open(DialogAbonoComponent, {
-        disableClose: true,
-        data: factura || null,
-      })
-      .afterClosed()
-      .subscribe((resultado) => {
-        if (resultado === true) {
-          this.buscarFactura();
-        }
-      });
+  dialogAbono() {
+    const factura = this.form.get('buscarFactura')?.value; // Obtén el número de factura
+    const saldo = this.form.get('saldo')?.value; // Obtén el saldo actual
+
+    console.log('abono', saldo);
+
+    const dialogRef = this.dialog.open(DialogAbonoComponent, {
+      data: {
+        factura,
+        saldo,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log(`Dialog result: ${result}`);
+      this.buscarFactura();
+    });
   }
 
   get cajaId() {

@@ -31,8 +31,6 @@ export class FacturaCompraComponent {
 
   enterKeyPressed = true;
 
-  date = new FormControl(new Date());
-
   proveedores: ProveedorModel[] = [];
   proveedoresFiltrados: ProveedorModel[] = [];
 

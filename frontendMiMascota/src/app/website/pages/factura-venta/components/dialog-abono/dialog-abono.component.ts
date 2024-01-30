@@ -26,10 +26,12 @@ export class DialogAbonoComponent {
   form: FormGroup;
   tituloAccion: string = 'Agregar';
   botonAccion: String = 'Guardar';
+  totalAbono: number = 0;
+  saldoAbono: number = 0;
 
   abonos: AbonosFacturaVentaModel[] = [];
 
-  date = new FormControl(new Date());
+  // date = new FormControl(new Date());
 
   formasPago: FormaPagoModel[] = [];
 
@@ -37,9 +39,9 @@ export class DialogAbonoComponent {
     'fecha',
     'recibo',
     'formaPago',
-    'valor',
     'descripcion',
     'anulado',
+    'valor',
   ];
 
   dataSource = new MatTableDataSource<AbonosFacturaVentaModel>([]);
@@ -48,7 +50,7 @@ export class DialogAbonoComponent {
   constructor(
     private formBuilder: FormBuilder,
     public dialogRef: MatDialogRef<DialogAbonoComponent>,
-    @Inject(MAT_DIALOG_DATA) public factura: string,
+    @Inject(MAT_DIALOG_DATA) public factura: any,
     private abonosFacturaVentaService: AbonosFacturaVentaService,
     private sweetalert2Service: Sweetalert2Service,
     private formaPagoService: FormaPagoService,
@@ -60,11 +62,14 @@ export class DialogAbonoComponent {
 
   ngOnInit(): void {
     this.getAllFormasPago();
-    this.getAllAbonos(this.factura);
+    this.getAllAbonos(this.factura.factura);
 
-    if (this.facturaVentaId) {
-      this.facturaVentaId.setValue(this.factura);
-    }
+    console.log(
+      'nroFactura',
+      this.factura.factura,
+      'saldo',
+      this.factura.saldo
+    );
   }
 
   save(event: MouseEvent) {
@@ -81,9 +86,7 @@ export class DialogAbonoComponent {
     console.log(data);
 
     this.abonosFacturaVentaService.create(data).subscribe((rta) => {
-      this.sweetalert2Service.swalSuccess(
-        'El usuario se registró correctamente'
-      );
+      this.sweetalert2Service.swalSuccess('El Pago se registró correctamente');
       this.dialogRef.close();
       // setTimeout(() => {
       //   window.location.reload();
@@ -101,13 +104,15 @@ export class DialogAbonoComponent {
         formaPago: abono.forma_pago?.nombre,
       }));
 
-      console.log('abonos: ', this.abonos);
-
       this.dataSource = new MatTableDataSource<AbonosFacturaVentaModel>(
         this.abonos
       );
       this.dataSource.paginator = this.paginator;
     });
+
+    this.totalAbono = this.getTotalCost();
+
+    this.saldoAbono = this.factura.saldo;
   }
 
   getAllFormasPago() {
@@ -122,10 +127,17 @@ export class DialogAbonoComponent {
 
   private buildForm() {
     this.form = this.formBuilder.group({
-      facturaVentaId: ['', Validators.required],
+      facturaVentaId: [this.factura.factura, Validators.required],
       formaPagoId: [1, Validators.required],
       fecha: [new Date(), Validators.required],
-      valor: ['', Validators.required],
+      valor: [
+        '',
+        [
+          Validators.required,
+          Validators.min(0), // Asegura que el valor no sea menor a 0
+          Validators.max(this.factura.saldo), // Asegura que el valor no sea mayor al saldo
+        ],
+      ],
       descripcion: [''],
       anulado: [false],
       usuarioModif: ['MiMascota'],
