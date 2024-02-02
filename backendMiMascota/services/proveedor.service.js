@@ -12,7 +12,12 @@ class ProveedorService {
   }
 
   async find() {
-    const proveedores = await models.Proveedor.findAll();
+    const proveedores = await models.Proveedor.findAll({
+      order: [
+        ['nombre', 'ASC'], // Orden ascendente por el campo 'nombre'
+        // Puedes agregar más criterios de ordenación según tus necesidades
+      ],
+    });
     return proveedores;
   }
 

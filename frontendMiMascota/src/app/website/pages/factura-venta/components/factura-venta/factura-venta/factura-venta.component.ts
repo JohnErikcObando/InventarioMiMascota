@@ -34,6 +34,9 @@ export class FacturaVentaComponent {
   cajas: CajaModel[] = [];
   formasPago: FormaPagoModel[] = [];
   productos: ProductoModel[] = [];
+  productosFiltrados: ProductoModel[] = [];
+  idProducto: number = 0;
+
   clientes: ClienteModel[] = [];
   clientesFiltrados: ClienteModel[] = [];
 
@@ -65,7 +68,7 @@ export class FacturaVentaComponent {
     this.getAllProductos();
     this.valueChangesCampos();
     this.findCliente();
-    this.addVenta();
+    this.findProducto();
   }
 
   save(event: MouseEvent) {
@@ -73,6 +76,7 @@ export class FacturaVentaComponent {
     console.log('from', data);
 
     delete data.buscarFactura;
+    delete data.nombreProducto;
 
     this.facturaVentaService.create(data).subscribe((rta) => {
       this.sweetalert2Service.swalSuccess(
@@ -209,6 +213,7 @@ export class FacturaVentaComponent {
       descripcion: [''],
       usuarioModif: ['Mi Mascota'],
       buscarFactura: [''],
+      nombreProducto: [''],
       // Estructura para clienteFactura
       clienteFactura: this.fb.group({
         id: ['', Validators.required],
@@ -234,45 +239,59 @@ export class FacturaVentaComponent {
   }
 
   addVenta() {
-    const ventaForm = this.fb.group({
-      productoId: [
-        { value: '', disabled: this.busquedaExitosa },
-        Validators.required,
-      ],
-      cantidad: [
-        { value: 1, disabled: this.busquedaExitosa },
-        Validators.required,
-      ],
-      valor: [
-        { value: '', disabled: this.busquedaExitosa },
-        Validators.required,
-      ],
-      total: [
-        { value: 0, disabled: this.busquedaExitosa },
-        Validators.required,
-      ],
-      usuarioModif: ['MiMascota'],
-    });
+    // Obtener el id del producto'
+    const idProducto = this.idProducto;
 
-    // Suscripción a cambios en 'cantidad' y 'venta' para recalcular 'total'
-    ventaForm
-      .get('cantidad')
-      ?.valueChanges.pipe(startWith(0))
-      .subscribe(() => {
-        this.calcularTotal(ventaForm);
-        this.actualizarSumaTotal();
+    console.log('idproducto', idProducto);
+
+    if (idProducto !== 0) {
+      const ventaForm = this.fb.group({
+        productoId: [
+          { value: 0, disabled: this.busquedaExitosa },
+          Validators.required,
+        ],
+        cantidad: [
+          { value: 1, disabled: this.busquedaExitosa },
+          Validators.required,
+        ],
+        valor: [
+          { value: '', disabled: this.busquedaExitosa },
+          Validators.required,
+        ],
+        total: [
+          { value: 0, disabled: this.busquedaExitosa },
+          Validators.required,
+        ],
+        usuarioModif: ['MiMascota'],
       });
 
-    ventaForm
-      .get('valor')
-      ?.valueChanges.pipe(startWith(0))
-      .subscribe(() => {
-        this.calcularTotal(ventaForm);
-        this.actualizarSumaTotal();
-      });
+      ventaForm.get('productoId')?.setValue(idProducto);
 
-    // Añadir el formulario creado al FormArray
-    this.detalleVenta.push(ventaForm);
+      // Suscripción a cambios en 'cantidad' y 'venta' para recalcular 'total'
+      ventaForm
+        .get('cantidad')
+        ?.valueChanges.pipe(startWith(0))
+        .subscribe(() => {
+          this.calcularTotal(ventaForm);
+          this.actualizarSumaTotal();
+        });
+
+      ventaForm
+        .get('valor')
+        ?.valueChanges.pipe(startWith(0))
+        .subscribe(() => {
+          this.calcularTotal(ventaForm);
+          this.actualizarSumaTotal();
+        });
+
+      // Añadir el formulario creado al FormArray
+      this.detalleVenta.push(ventaForm);
+
+      this.onProductoSelected(idProducto);
+    }
+    // Reiniciar el valor del campo 'nombreProducto'
+    this.form.get('nombreProducto')?.setValue('');
+    this.idProducto = 0;
   }
 
   removeVenta(i: number) {
@@ -323,8 +342,10 @@ export class FacturaVentaComponent {
     this.form.get('saldo')?.setValue(saldoTotal);
   }
 
-  onProductoSelected(event: MatSelectChange) {
-    const selectedProductoId = event.value; // Obtiene el ID seleccionado
+  onProductoSelected(productoId: number) {
+    const selectedProductoId = productoId; // Obtiene el ID seleccionado
+
+    console.log('selectedProductoId', selectedProductoId);
 
     // Encuentra el índice del formulario de compra actual
     const index = this.detalleVenta.controls.findIndex(
@@ -334,6 +355,8 @@ export class FacturaVentaComponent {
         control.get('productoId')!.value === selectedProductoId
     );
 
+    console.log('selectedProductoId', selectedProductoId, 'index', index);
+
     // Verifica si se encontró el formulario de compra correspondiente al producto seleccionado
     if (index !== -1) {
       const ventaForm = this.detalleVenta.at(index) as FormGroup | null; // Asegurarse de que sea un FormGroup o null
@@ -342,16 +365,17 @@ export class FacturaVentaComponent {
         const ventaControl = ventaForm.get('valor') as FormControl | null; // Asegurarse de que sea un FormControl o null
 
         if (ventaControl) {
-          this.productoService.get(selectedProductoId).subscribe(
-            (producto) => {
-              ventaControl.setValue(producto.valor); // Asumiendo que 'valor' es el campo que contiene el valor de venta en tu modelo de Producto
-              this.calcularTotal(ventaForm); // Recalcula el total después de cargar el valor de venta
+          this.productoService.get(selectedProductoId).subscribe({
+            next: (producto: ProductoModel) => {
+              ventaControl.setValue(producto.valor);
+              this.calcularTotal(ventaForm);
               this.actualizarSumaTotal();
+              console.log('producto', producto);
             },
-            (error) => {
+            error: (error) => {
               console.error('Error al cargar el valor de venta', error);
-            }
-          );
+            },
+          });
         }
       }
     }
@@ -366,6 +390,8 @@ export class FacturaVentaComponent {
       this.actualizarSumaTotal();
     });
   }
+
+  // -------------------------- buscar Cliente --------------------------------------------
 
   findCliente() {
     this.form
@@ -382,13 +408,37 @@ export class FacturaVentaComponent {
   // Función para seleccionar un clientes de la lista filtrada
   selectCliente(cliente: ClienteModel) {
     this.form.get('clienteFactura')?.patchValue(cliente);
-    // Puedes agregar más lógica aquí si es necesario
   }
 
   // Función para mostrar el nombre del clientes en el campo de entrada
   displayClientesName(cliente: ClienteModel | null): string {
     return cliente ? cliente.nombre : '';
   }
+
+  // ------------------------------------------------------------------------------------------
+
+  // -------------------------- buscar Producto --------------------------------------------
+
+  findProducto() {
+    this.form
+      .get('nombreProducto')
+      ?.valueChanges.pipe(startWith(''))
+      .subscribe((nombre: string) => {
+        // Filtra los producto basándose en el nombre ingresado
+        this.productosFiltrados = this.productos.filter((producto) =>
+          (producto.nombre || '').includes(nombre)
+        );
+      });
+  }
+
+  // Función para seleccionar un clientes de la lista filtrada
+  selectProducto(producto: ProductoModel) {
+    this.form.get('nombreProducto')?.patchValue(producto.nombre);
+    this.idProducto = producto.id;
+    console.log('this.idProducto', this.idProducto);
+  }
+
+  // ------------------------------------------------------------------------------------------
 
   dialogAbono() {
     const factura = this.form.get('buscarFactura')?.value; // Obtén el número de factura
@@ -448,6 +498,10 @@ export class FacturaVentaComponent {
   get idCliente() {
     return this.form.get('clienteFactura.id');
   }
+  get nombreProducto() {
+    return this.form.get('nombreProducto');
+  }
+
   get nombreCliente() {
     return this.form.get('clienteFactura.nombre');
   }

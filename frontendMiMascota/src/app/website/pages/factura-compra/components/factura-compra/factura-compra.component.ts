@@ -36,7 +36,10 @@ export class FacturaCompraComponent {
 
   cajas: CajaModel[] = [];
   formasPago: FormaPagoModel[] = [];
+
   productos: ProductoModel[] = [];
+  productosFiltrados: ProductoModel[] = [];
+  idProducto: number = 0;
 
   sumaTotal: number = 0;
 
@@ -60,12 +63,13 @@ export class FacturaCompraComponent {
     this.getAllProductos();
     this.valueChangesCampos();
     this.findProveedor();
-    this.addCompra();
+    this.findProducto();
   }
 
   save(event: MouseEvent) {
     const data = this.form.value;
-    console.log('from', data);
+
+    delete data.nombreProducto;
 
     this.facturaCompraService.create(data).subscribe((rta) => {
       this.sweetalert2Service.swalSuccess(
@@ -117,6 +121,7 @@ export class FacturaCompraComponent {
       descripcion: [''],
       imagenUrl: ['', Validators.required],
       usuarioModif: ['Mi Mascota'],
+      nombreProducto: [''],
       // Estructura para proveedorFactura
       proveedorFactura: this.formBuilder.group({
         id: ['', Validators.required],
@@ -136,35 +141,55 @@ export class FacturaCompraComponent {
     return this.form.get('detalleCompra') as FormArray;
   }
 
+  // ---- agregar un producto
   addCompra() {
-    const compraForm = this.formBuilder.group({
-      productoId: ['', Validators.required],
-      cantidad: [1, Validators.required],
-      costo: ['', Validators.required],
-      venta: ['', Validators.required],
-      total: [0, Validators.required],
-      usuarioModif: ['MiMascota'],
-    });
+    // Obtener el id del producto'
+    const idProducto = this.idProducto;
 
-    // Suscripción a cambios en 'cantidad' y 'venta' para recalcular 'total'
-    compraForm
-      .get('cantidad')
-      ?.valueChanges.pipe(startWith(0))
-      .subscribe(() => {
-        this.calcularTotal(compraForm);
-        this.actualizarSumaTotal();
+    // Verificar si hay un valor en el campo 'nombreProducto'
+    if (idProducto !== 0) {
+      // Crear un nuevo formulario de compra
+      const compraForm = this.formBuilder.group({
+        productoId: [0, Validators.required],
+        cantidad: [1, Validators.required],
+        costo: ['', Validators.required],
+        venta: ['', Validators.required],
+        total: [0, Validators.required],
+        usuarioModif: ['MiMascota'],
       });
 
-    compraForm
-      .get('costo')
-      ?.valueChanges.pipe(startWith(0))
-      .subscribe(() => {
-        this.calcularTotal(compraForm);
-        this.actualizarSumaTotal();
-      });
+      console.log('idproducto', idProducto);
 
-    // Añadir el formulario creado al FormArray
-    this.detalleCompra.push(compraForm);
+      // Establecer el valor del campo 'productoId' en el control del formulario
+      compraForm.get('productoId')?.setValue(idProducto);
+
+      // Suscripción a cambios en 'cantidad' y 'venta' para recalcular 'total'
+      compraForm
+        .get('cantidad')
+        ?.valueChanges.pipe(startWith(0))
+        .subscribe(() => {
+          this.calcularTotal(compraForm);
+          this.actualizarSumaTotal();
+        });
+
+      compraForm
+        .get('costo')
+        ?.valueChanges.pipe(startWith(0))
+        .subscribe(() => {
+          this.calcularTotal(compraForm);
+          this.actualizarSumaTotal();
+        });
+
+      // Añadir el nuevo formulario de compra al FormArray
+      this.detalleCompra.push(compraForm);
+
+      this.onProductoSelected(idProducto);
+
+      console.log('nombreProducto', this.form.get('nombreProducto')?.value);
+    }
+    // Reiniciar el valor del campo 'nombreProducto'
+    this.form.get('nombreProducto')?.setValue('');
+    this.idProducto = 0;
   }
 
   removeCompra(i: number) {
@@ -199,8 +224,6 @@ export class FacturaCompraComponent {
     const total = sumaTotalDetalles - descuento;
     let saldoTotal = total - saldo;
 
-    console.log('saldoTotal', saldoTotal);
-
     if (saldoTotal < 0) {
       saldoTotal = total;
     }
@@ -215,8 +238,8 @@ export class FacturaCompraComponent {
     this.form.get('saldo')?.setValue(saldoTotal);
   }
 
-  onProductoSelected(event: MatSelectChange) {
-    const selectedProductoId = event.value; // Obtiene el ID seleccionado
+  onProductoSelected(productoId: number) {
+    const selectedProductoId = productoId; // Obtiene el ID seleccionado
 
     // Encuentra el índice del formulario de compra actual
     const index = this.detalleCompra.controls.findIndex(
@@ -234,16 +257,16 @@ export class FacturaCompraComponent {
         const ventaControl = compraForm.get('venta') as FormControl | null; // Asegurarse de que sea un FormControl o null
 
         if (ventaControl) {
-          this.productoService.get(selectedProductoId).subscribe(
-            (producto) => {
-              ventaControl.setValue(producto.valor); // Asumiendo que 'valor' es el campo que contiene el valor de venta en tu modelo de Producto
-              this.calcularTotal(compraForm); // Recalcula el total después de cargar el valor de venta
+          this.productoService.get(selectedProductoId).subscribe({
+            next: (producto: ProductoModel) => {
+              ventaControl.setValue(producto.valor);
+              this.calcularTotal(compraForm);
               this.actualizarSumaTotal();
             },
-            (error) => {
+            error: (error) => {
               console.error('Error al cargar el valor de venta', error);
-            }
-          );
+            },
+          });
         }
       }
     }
@@ -265,6 +288,7 @@ export class FacturaCompraComponent {
     });
   }
 
+  // -------------------------- buscar Proveedor --------------------------------------------
   findProveedor() {
     this.form
       .get('proveedorFactura.nombre')
@@ -280,13 +304,30 @@ export class FacturaCompraComponent {
   // Función para seleccionar un proveedor de la lista filtrada
   selectProveedor(proveedor: ProveedorModel) {
     this.form.get('proveedorFactura')?.patchValue(proveedor);
-    // Puedes agregar más lógica aquí si es necesario
   }
 
-  // Función para mostrar el nombre del proveedor en el campo de entrada
-  displayProveedorName(proveedor: ProveedorModel | null): string {
-    return proveedor ? proveedor.nombre : '';
+  // --------------------------------------------------------------------------------------
+  // -------------------------- buscar Producto --------------------------------------------
+
+  findProducto() {
+    this.form
+      .get('nombreProducto')
+      ?.valueChanges.pipe(startWith(''))
+      .subscribe((nombre: string) => {
+        // Filtra los productos basándose en el nombre ingresado
+        this.productosFiltrados = this.productos.filter((producto) =>
+          (producto.nombre || '').includes(nombre)
+        );
+      });
   }
+
+  // Función para seleccionar un producto de la lista filtrada
+  selectProducto(producto: ProductoModel) {
+    this.form.get('nombreProducto')?.setValue(producto.nombre);
+    this.idProducto = producto.id;
+  }
+
+  // --------------------------------------------------------------------------------------
 
   get idProveedor() {
     return this.form.get('proveedorFactura.id');
@@ -315,5 +356,9 @@ export class FacturaCompraComponent {
 
   get usuarioModifProveedor() {
     return this.form.get('proveedorFactura.usuarioModif');
+  }
+
+  get nombreProducto() {
+    return this.form.get('nombreProducto');
   }
 }

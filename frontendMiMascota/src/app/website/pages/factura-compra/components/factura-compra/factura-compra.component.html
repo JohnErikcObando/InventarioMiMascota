@@ -10,11 +10,7 @@
 
   <mat-form-field class="half-width">
     <mat-label>Fecha</mat-label>
-    <input
-      matInput
-      [matDatepicker]="picker"
-      formControlName="fecha"
-    />
+    <input matInput [matDatepicker]="picker" formControlName="fecha" />
     <mat-hint>MM/DD/YYYY</mat-hint>
     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
@@ -193,6 +189,38 @@
 
   <mat-card>
     <mat-card-content>
+      <div class="compra-form-row">
+        <mat-form-field class="full-width">
+          <mat-label>Producto</mat-label>
+          <input
+            matInput
+            formControlName="nombreProducto"
+            [matAutocomplete]="autoProducto"
+            [value]="nombreProducto?.value?.nombre | ajustarTexto"
+          />
+          <mat-autocomplete
+            #autoProducto="matAutocomplete"
+            (optionSelected)="selectProducto($event.option.value)"
+          >
+            <mat-option
+              *ngFor="let producto of productosFiltrados"
+              [value]="producto"
+            >
+              {{ producto.nombre }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <button
+          mat-mini-fab
+          color="primary"
+          type="button"
+          (click)="addCompra()"
+        >
+          <mat-icon class="add-course-btn">add</mat-icon>
+        </button>
+      </div>
+
       <ng-container formArrayName="detalleCompra" class="compra-form-row">
         <ng-container
           *ngFor="let compra of detalleCompra.controls; let i = index"
@@ -200,10 +228,7 @@
           <div class="compra-form-row" [formGroupName]="i">
             <mat-form-field class="half-width">
               <mat-label>Producto</mat-label>
-              <mat-select
-                formControlName="productoId"
-                (selectionChange)="onProductoSelected($event)"
-              >
+              <mat-select formControlName="productoId">
                 <mat-option *ngFor="let item of productos" [value]="item.id">{{
                   item.nombre
                 }}</mat-option>
@@ -278,15 +303,6 @@
             </button>
           </div>
         </ng-container>
-
-        <button
-          mat-mini-fab
-          color="primary"
-          type="button"
-          (click)="addCompra()"
-        >
-          <mat-icon class="add-course-btn">add</mat-icon>
-        </button>
       </ng-container>
     </mat-card-content>
   </mat-card>

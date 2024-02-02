@@ -222,24 +222,55 @@
   <h2>Detalle de Ventas</h2>
 
   <mat-card>
-    <mat-card-content>
-      <ng-container formArrayName="detalleVenta" class="compra-form-row">
-        <ng-container
-          *ngFor="let compra of detalleVenta.controls; let i = index"
+    <mat-card-header>
+      <mat-form-field class="full-width">
+        <mat-label>Producto</mat-label>
+        <input
+          matInput
+          formControlName="nombreProducto"
+          [matAutocomplete]="autoProducto"
+          [value]="nombreProducto?.value?.nombre | ajustarTexto"
+        />
+        <mat-autocomplete
+          autoActiveFirstOption
+          #autoProducto="matAutocomplete"
+          (optionSelected)="selectProducto($event.option.value)"
         >
-          <div class="compra-form-row" [formGroupName]="i">
+          <mat-option
+            *ngFor="let producto of productosFiltrados"
+            [value]="producto"
+          >
+            {{ producto.nombre }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <button
+        mat-mini-fab
+        color="primary"
+        type="button"
+        *ngIf="!busquedaExitosa"
+        (click)="addVenta()"
+      >
+        <mat-icon class="add-course-btn">add</mat-icon>
+      </button>
+    </mat-card-header>
+
+    <mat-card-content>
+      <ng-container formArrayName="detalleVenta" class="venta-form-row">
+        <ng-container
+          *ngFor="let venta of detalleVenta.controls; let i = index"
+        >
+          <div class="venta-form-row" [formGroupName]="i">
             <mat-form-field class="half-width">
               <mat-label>Producto</mat-label>
-              <mat-select
-                formControlName="productoId"
-                (selectionChange)="onProductoSelected($event)"
-              >
+              <mat-select formControlName="productoId">
                 <mat-option *ngFor="let item of productos" [value]="item.id">{{
                   item.nombre
                 }}</mat-option>
               </mat-select>
 
-              <mat-error *ngIf="compra.get('productoId')?.hasError('required')">
+              <mat-error *ngIf="venta.get('productoId')?.hasError('required')">
                 Campo requerido
               </mat-error>
             </mat-form-field>
@@ -252,7 +283,7 @@
                 placeholder="1"
                 type="number"
               />
-              <mat-error *ngIf="compra.get('cantidad')?.hasError('required')">
+              <mat-error *ngIf="venta.get('cantidad')?.hasError('required')">
                 Campo requerido
               </mat-error>
             </mat-form-field>
@@ -266,7 +297,7 @@
                 class="right-align"
               />
               <span matTextPrefix>$&nbsp;</span>
-              <mat-error *ngIf="compra.get('valor')?.hasError('required')">
+              <mat-error *ngIf="venta.get('valor')?.hasError('required')">
                 Campo requerido
               </mat-error>
             </mat-form-field>
@@ -282,7 +313,7 @@
                 readonly
               />
               <span matTextPrefix>$&nbsp;</span>
-              <mat-error *ngIf="compra.get('cantidad')?.hasError('required')">
+              <mat-error *ngIf="venta.get('cantidad')?.hasError('required')">
                 Campo requerido
               </mat-error>
             </mat-form-field>
@@ -293,7 +324,7 @@
                 formControlName="usuarioModif"
                 placeholder="Usuario Modif"
               />
-              <mat-error *ngIf="compra.get('cantidad')?.hasError('required')">
+              <mat-error *ngIf="venta.get('cantidad')?.hasError('required')">
                 Campo requerido
               </mat-error>
             </mat-form-field>
@@ -308,16 +339,6 @@
             </button>
           </div>
         </ng-container>
-
-        <button
-          mat-mini-fab
-          color="primary"
-          type="button"
-          *ngIf="!busquedaExitosa"
-          (click)="addVenta()"
-        >
-          <mat-icon class="add-course-btn">add</mat-icon>
-        </button>
       </ng-container>
     </mat-card-content>
   </mat-card>
@@ -329,9 +350,7 @@
   <h2>Valor Factura</h2>
 
   <mat-card>
-    <mat-card-header>
-      <!-- <mat-card-title>Proveedor</mat-card-title> -->
-    </mat-card-header>
+    <mat-card-header> </mat-card-header>
 
     <mat-card-content class="valor-factura-container">
       <div class="valor-factura-column">

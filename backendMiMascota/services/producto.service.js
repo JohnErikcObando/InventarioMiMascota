@@ -17,6 +17,9 @@ class ProductoService {
         { model: models.Marca, as: 'marca' },
         { model: models.Categoria, as: 'categoria' },
       ],
+      order: [
+        ['nombre', 'ASC'], // Orden ascendente por el campo 'nombre'
+      ],
     });
     return productos;
   }
