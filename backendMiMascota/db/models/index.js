@@ -19,7 +19,7 @@ const { ImpuestoSchema, Impuesto } = require('./impuesto.model');
 const { FacturaVentaSchema, FacturaVenta } = require('./facturaVenta.model');
 const { VentaSchema, Venta } = require('./venta.model');
 const { ImpuestoFacturaSchema,ImpuestoFactura} = require('./impuestoFactura.model');
-const { AbonoFacturaVentaSchema, AbonoFacturaVenta } = require('./AbonoFacturaVenta.model');
+const { AbonoFacturaVentaSchema, AbonoFacturaVenta } = require('./abonoFacturaVenta.model');
 
 function setupModels(sequelize) {
   Empresa.init(EmpresaSchema, Empresa.config(sequelize));
