@@ -14,29 +14,26 @@ AS $BODY$
 DECLARE
     anio_actual integer;
     mes_actual integer;
-    total numeric;
+    mes_nombre text; -- Declarar la variable mes_nombre
 BEGIN
-    -- Obten el año actual
-    SELECT EXTRACT(YEAR FROM CURRENT_DATE) INTO anio_actual;
-
+    -- Obtiene el año y el mes actual
+    SELECT EXTRACT(YEAR FROM CURRENT_DATE), EXTRACT(MONTH FROM CURRENT_DATE) INTO anio_actual, mes_actual;
+    
     -- Inicializa la tabla temporal para almacenar los resultados
     CREATE TEMP TABLE resultados_temp (mes text, total numeric);
-
-    -- Ciclo FOR para iterar a través de los meses
-    FOR mes_actual IN 1..12 LOOP
-        -- Inicializa la variable resultado en 0
-        total := 0;
-
-        -- Construye la consulta dinámica para obtener las ventas del mes
-        EXECUTE 'SELECT COALESCE(SUM(total), 0) FROM factura_ventas WHERE EXTRACT(MONTH FROM fecha) = ' || mes_actual || ' AND EXTRACT(YEAR FROM fecha) = ' || anio_actual INTO total;
-
-        -- Inserta el resultado en la tabla temporal
-        INSERT INTO resultados_temp (mes, total) VALUES (TO_CHAR(DATE '2000-01-01' + INTERVAL '1 month' * mes_actual, 'TMMonth'), total);
+    
+    -- Ciclo FOR para iterar a través de los meses del año
+    FOR i IN 1..12 LOOP
+        -- Obtiene el nombre del mes en español
+        EXECUTE 'SELECT to_char(DATE_TRUNC(''MONTH'', (DATE ''2000-01-01'' + (' || i || ' - 1) * INTERVAL ''1 month'')), ''Month'')' INTO mes_nombre;
+        
+        -- Calcula el total de ventas para el mes actual
+        EXECUTE 'INSERT INTO resultados_temp (mes, total) SELECT ' || quote_literal(mes_nombre) || ', COALESCE(SUM(total), 0) FROM factura_ventas WHERE EXTRACT(MONTH FROM fecha) = ' || i || ' AND EXTRACT(YEAR FROM fecha) = ' || anio_actual;
     END LOOP;
-
+    
     -- Devuelve los resultados de la tabla temporal
     RETURN QUERY SELECT * FROM resultados_temp;
-
+    
     -- Borra la tabla temporal
     DROP TABLE resultados_temp;
 END;
