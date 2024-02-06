@@ -4,7 +4,7 @@ const EmpresaService = require('./../services/empresa.service');
 const validatorHandler = require('./../middlewares/validator.handler');
 const {
   CreateEmpresaSchema,
-  updateEmpresaSchema,
+  UpdateEmpresaSchema,
   GetEmpresaSchema,
 } = require('./../Schemas/empresa.schema');
 
@@ -51,7 +51,7 @@ router.post(
 router.put(
   '/:id',
   validatorHandler(GetEmpresaSchema, 'params'),
-  validatorHandler(updateEmpresaSchema, 'body'),
+  validatorHandler(UpdateEmpresaSchema, 'body'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
