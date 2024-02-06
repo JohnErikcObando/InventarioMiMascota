@@ -6,7 +6,7 @@ const {
   CreateEmpresaSchema,
   UpdateEmpresaSchema,
   GetEmpresaSchema,
-} = require('./../Schemas/empresa.schema');
+} = require('../schemas/empresa.schema');
 
 const router = express.Router();
 const service = new EmpresaService();

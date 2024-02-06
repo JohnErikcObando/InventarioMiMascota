@@ -8,7 +8,7 @@ const {
   UpdateMarcaSchema,
   GetMarcaSchema,
   UpdateMarcaModifSchema,
-} = require('../Schemas/marca.schema');
+} = require('../schemas/marca.schema');
 
 const router = express.Router();
 const service = new MarcaService();

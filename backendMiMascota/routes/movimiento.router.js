@@ -7,7 +7,7 @@ const {
   CreateMovimientoSchema,
   UpdateMovimientoSchema,
   GetMovimientoSchema,
-} = require('../Schemas/movimiento.schema');
+} = require('../schemas/movimiento.schema');
 
 const router = express.Router();
 const service = new MovimientoService();

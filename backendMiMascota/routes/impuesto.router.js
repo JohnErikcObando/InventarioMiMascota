@@ -8,7 +8,7 @@ const {
   UpdateImpuestoSchema,
   GetImpuestoSchema,
   UpdateImpuestoModifSchema,
-} = require('../Schemas/impuesto.schema');
+} = require('../schemas/impuesto.schema');
 
 const router = express.Router();
 const service = new ImpuestoService();

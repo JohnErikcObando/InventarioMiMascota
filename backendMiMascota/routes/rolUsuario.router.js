@@ -7,7 +7,7 @@ const {
   CreateRolUsuarioSchema,
   UpdateRolUsuarioSchema,
   GetRolUsuarioSchema,
-} = require('./../Schemas/rolUsuario.schema');
+} = require('./../schemas/rolUsuario.schema');
 
 const router = express.Router();
 const service = new RolUsuarioService();

@@ -7,7 +7,7 @@ const {
   CreateMenuRolSchema,
   UpdateMenuRolSchema,
   GetMenuRolSchema,
-} = require('../Schemas/menuRol.schema');
+} = require('../schemas/menuRol.schema');
 
 const router = express.Router();
 const service = new MenuRolService();

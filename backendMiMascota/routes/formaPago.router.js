@@ -6,7 +6,7 @@ const {
   UpdateFormaPagoSchema,
   GetFormaPagoSchema,
   UpdateFormaPagoModifSchema,
-} = require('./../Schemas/formaPago.schema');
+} = require('./../schemas/formaPago.schema');
 
 const router = express.Router();
 const service = new FormaPagoService();

@@ -7,7 +7,7 @@ const {
   CreateImpuestoFacturaSchema,
   UpdateImpuestoFacturaSchema,
   GetImpuestoFacturaSchema,
-} = require('../Schemas/impuestoFactura.schema');
+} = require('../schemas/impuestoFactura.schema');
 
 const router = express.Router();
 const service = new ImpuestoFacturaService();

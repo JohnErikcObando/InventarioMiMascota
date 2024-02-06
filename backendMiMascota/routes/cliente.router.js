@@ -6,7 +6,7 @@ const {
   UpdateClienteSchema,
   GetClienteSchema,
   UpdateClienteModifSchema,
-} = require('../Schemas/cliente.schema');
+} = require('../schemas/cliente.schema');
 const boom = require('@hapi/boom');
 
 const router = express.Router();

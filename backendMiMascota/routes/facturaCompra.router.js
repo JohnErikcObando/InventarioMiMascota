@@ -5,7 +5,7 @@ const {
   CreateFacturaCompraSchema,
   UpdateFacturaCompraSchema,
   GetFacturaCompraSchema,
-} = require('../Schemas/facturaCompra.schema');
+} = require('../schemas/facturaCompra.schema');
 const boom = require('@hapi/boom');
 
 const router = express.Router();

@@ -7,7 +7,7 @@ const {
   CreateMenuSchema,
   UpdateMenuSchema,
   GetMenuSchema,
-} = require('../Schemas/menu.schema');
+} = require('../schemas/menu.schema');
 
 const router = express.Router();
 const service = new MenuService();

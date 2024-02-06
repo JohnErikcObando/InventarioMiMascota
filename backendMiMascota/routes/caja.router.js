@@ -6,7 +6,7 @@ const {
   UpdateCajaSchema,
   GetCajaSchema,
   UpdateCajaModifSchema,
-} = require('../Schemas/caja.schema');
+} = require('../schemas/caja.schema');
 const boom = require('@hapi/boom');
 
 const router = express.Router();

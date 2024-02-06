@@ -7,7 +7,7 @@ const {
   CreateInventarioSchema,
   UpdateInventarioSchema,
   GetInventarioSchema,
-} = require('../Schemas/inventario.schema');
+} = require('../schemas/inventario.schema');
 
 const router = express.Router();
 const service = new InventarioService();

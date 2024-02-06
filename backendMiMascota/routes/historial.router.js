@@ -5,7 +5,7 @@ const {
   CreateHistorialSchema,
   UpdateHistorialSchema,
   GetHistorialSchema,
-} = require('../Schemas/historial.schema');
+} = require('../schemas/historial.schema');
 const boom = require('@hapi/boom');
 
 const router = express.Router();

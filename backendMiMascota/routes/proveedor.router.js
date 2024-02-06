@@ -8,7 +8,7 @@ const {
   UpdateProveedorSchema,
   GetProveedorSchema,
   UpdateProveedorModifSchema,
-} = require('../Schemas/proveedor.schema');
+} = require('../schemas/proveedor.schema');
 
 const router = express.Router();
 const service = new ProveedorService();

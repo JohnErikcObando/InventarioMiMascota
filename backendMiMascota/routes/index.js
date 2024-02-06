@@ -21,7 +21,7 @@ const impuesto = require('./impuesto.router');
 const facturaVenta = require('./facturaVenta.router');
 const venta = require('./venta.router');
 const impuestoFactura = require('./impuestoFactura.router');
-const abonoFacturaRouter = require('./AbonoFacturaVenta.router');
+const abonoFacturaRouter = require('./abonoFacturaVenta.router');
 
 const dashBoard = require('./dashBoard.router');
 
@@ -50,7 +50,7 @@ function routerApi(app) {
   router.use('/facturaVenta', facturaVenta);
   router.use('/venta', venta);
   router.use('/impuestoFactura', impuestoFactura);
-  router.use('/AbonoFacturaVenta', abonoFacturaRouter);
+  router.use('/abonoFacturaVenta', abonoFacturaRouter);
 
   router.use('/dashBoard', dashBoard);
 }

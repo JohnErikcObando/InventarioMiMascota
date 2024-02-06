@@ -7,7 +7,7 @@ const {
   CreateVentaSchema,
   UpdateVentaSchema,
   GetVentaSchema,
-} = require('../Schemas/venta.schema');
+} = require('../schemas/venta.schema');
 
 const router = express.Router();
 const service = new VentaService();

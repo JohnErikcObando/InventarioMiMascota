@@ -5,7 +5,7 @@ const {
   CreateCompraSchema,
   UpdateCompraSchema,
   GetCompraSchema,
-} = require('../Schemas/compra.schema');
+} = require('../schemas/compra.schema');
 const boom = require('@hapi/boom');
 
 const router = express.Router();
