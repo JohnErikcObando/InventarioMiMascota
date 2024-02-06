@@ -21,7 +21,7 @@ const { IMPUESTO_TABLE, ImpuestoSchema} = require('./../models/impuesto.model');
 const { FACTURA_VENTA_TABLE, FacturaVentaSchema} = require('./../models/facturaVenta.model');
 const { VENTA_TABLE, VentaSchema } = require('./../models/venta.model');
 const { IMPUESTO_FACTURA_TABLE, ImpuestoFacturaSchema} = require('./../models/impuestoFactura.model');
-const { ABONO_FACTURA_TABLE_VENTA, AbonoFacturaVentaSchema} = require('../models/AbonoFacturaVenta.model');
+const { ABONO_FACTURA_TABLE_VENTA, AbonoFacturaVentaSchema} = require('../models/abonoFacturaVenta.model');
 
 
 /** @type {import('sequelize-cli').Migration} */
