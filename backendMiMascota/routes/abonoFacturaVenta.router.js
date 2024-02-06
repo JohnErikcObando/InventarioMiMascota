@@ -5,7 +5,7 @@ const {
   UpdateAbonoFacturaVentaSchema,
   GetAbonoFacturaVentaSchema,
 } = require('./../schemas/AbonoFacturaVenta.schema');
-const AbonoFacturaService = require('../services/AbonoFacturaVenta.service');
+const AbonoFacturaService = require('../services/abonoFacturaVenta.service');
 
 const router = express.Router();
 const service = new AbonoFacturaService();
