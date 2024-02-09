@@ -93,7 +93,9 @@ export class DialogFromProductoComponent {
   update() {
     const data = this.form.value;
     this.productoService.update(this.idProducto, data).subscribe((rta) => {
-      this.sweetalert2Service.swalSuccess('El usuario se edito correctamente');
+      this.sweetalert2Service.swalSuccess(
+        'El Producto Se Registró Correctamente'
+      );
       this.dialogRef.close();
       setTimeout(() => {
         window.location.reload();

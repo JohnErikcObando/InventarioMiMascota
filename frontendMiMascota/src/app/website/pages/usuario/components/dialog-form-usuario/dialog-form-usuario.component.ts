@@ -76,7 +76,7 @@ export class DialogFormUsuarioComponent {
     const data = this.formUsuario.value;
     this.usuarioService.create(data).subscribe((rta) => {
       this.sweetalert2Service.swalSuccess(
-        'El usuario se registró correctamente'
+        'El Usuario Se Registró Correctamente'
       );
       this.dialogRef.close();
       setTimeout(() => {

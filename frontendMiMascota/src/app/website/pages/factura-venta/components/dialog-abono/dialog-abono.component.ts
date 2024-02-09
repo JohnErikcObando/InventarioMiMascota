@@ -86,7 +86,7 @@ export class DialogAbonoComponent {
     console.log(data);
 
     this.abonosFacturaVentaService.create(data).subscribe((rta) => {
-      this.sweetalert2Service.swalSuccess('El Pago se registró correctamente');
+      this.sweetalert2Service.swalSuccess('La Abono Se Registró Correctamente');
       this.dialogRef.close();
       // setTimeout(() => {
       //   window.location.reload();

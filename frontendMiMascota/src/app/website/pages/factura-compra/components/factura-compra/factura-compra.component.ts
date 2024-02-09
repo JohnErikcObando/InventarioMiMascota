@@ -73,7 +73,7 @@ export class FacturaCompraComponent {
 
     this.facturaCompraService.create(data).subscribe((rta) => {
       this.sweetalert2Service.swalSuccess(
-        'Se registró la Factura correctamente'
+        'La Factura Compra Se Registró Correctamente'
       );
 
       setTimeout(() => {

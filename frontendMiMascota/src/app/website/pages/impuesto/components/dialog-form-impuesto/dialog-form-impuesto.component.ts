@@ -55,7 +55,7 @@ export class DialogFormImpuestoComponent {
     const data = this.form.value;
     this.impuestoService.create(data).subscribe((rta) => {
       this.sweetalert2Service.swalSuccess(
-        'El usuario se registró correctamente'
+        'El Impuesto Se Registró Correctamente'
       );
       this.dialogRef.close();
       setTimeout(() => {

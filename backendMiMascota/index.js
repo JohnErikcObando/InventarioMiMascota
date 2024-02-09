@@ -15,7 +15,11 @@ const port = 3000;
 app.use(express.json());
 
 //Permitir los cors
-const whitelist = ['http://localhost:4200', 'https://myapp.co'];
+const whitelist = [
+  'http://localhost:4200',
+  'https://myapp.co',
+  'https://mimascota.onrender.com',
+];
 const options = {
   origin: (origin, callback) => {
     if (whitelist.includes(origin) || !origin) {

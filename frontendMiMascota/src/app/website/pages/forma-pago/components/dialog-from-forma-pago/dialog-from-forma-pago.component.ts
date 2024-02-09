@@ -55,7 +55,7 @@ export class DialogFromFormaPagoComponent {
     const data = this.form.value;
     this.formaPagoService.create(data).subscribe((rta) => {
       this.sweetalert2Service.swalSuccess(
-        'El usuario se registró correctamente'
+        'La Forma De Pago Se Registró Correctamente'
       );
       this.dialogRef.close();
       setTimeout(() => {

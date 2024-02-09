@@ -55,7 +55,7 @@ export class DialogformMarcaComponent {
     const data = this.formMarca.value;
     this.marcaService.create(data).subscribe((rta) => {
       this.sweetalert2Service.swalSuccess(
-        'El usuario se registró correctamente'
+        'La Marca Se Registró Correctamente'
       );
       this.dialogRef.close();
       setTimeout(() => {

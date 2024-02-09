@@ -56,7 +56,7 @@ export class DialogFormCategoriaComponent {
     const data = this.form.value;
     this.categoriaService.create(data).subscribe((rta) => {
       this.sweetalert2Service.swalSuccess(
-        'El usuario se registró correctamente'
+        'La Categoria Se Registró Correctamente'
       );
       this.dialogRef.close();
       setTimeout(() => {

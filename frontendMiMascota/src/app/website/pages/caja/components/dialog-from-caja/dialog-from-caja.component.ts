@@ -54,9 +54,7 @@ export class DialogFromCajaComponent {
   create() {
     const data = this.form.value;
     this.cajaService.create(data).subscribe((rta) => {
-      this.sweetalert2Service.swalSuccess(
-        'El usuario se registró correctamente'
-      );
+      this.sweetalert2Service.swalSuccess('La Caja Se Registró Correctamente');
       this.dialogRef.close();
       setTimeout(() => {
         window.location.reload();

@@ -58,7 +58,7 @@ export class DialogFromProveedorComponent {
     const data = this.form.value;
     this.proveedorService.create(data).subscribe((rta) => {
       this.sweetalert2Service.swalSuccess(
-        'El usuario se registró correctamente'
+        'El Proveedor Se Registró Correctamente'
       );
       this.dialogRef.close();
       setTimeout(() => {

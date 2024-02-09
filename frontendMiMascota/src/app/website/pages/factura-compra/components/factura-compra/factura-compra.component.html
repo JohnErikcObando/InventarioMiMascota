@@ -196,7 +196,7 @@
             matInput
             formControlName="nombreProducto"
             [matAutocomplete]="autoProducto"
-            [value]="nombreProducto?.value?.nombre | ajustarTexto"
+            [value]="nombreProducto?.value | ajustarTexto"
           />
           <mat-autocomplete
             #autoProducto="matAutocomplete"

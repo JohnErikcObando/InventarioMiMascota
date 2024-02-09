@@ -80,7 +80,7 @@ export class FacturaVentaComponent {
 
     this.facturaVentaService.create(data).subscribe((rta) => {
       this.sweetalert2Service.swalSuccess(
-        'Se registró la Factura correctamente'
+        'La Factura Venta Se Registró Correctamente'
       );
 
       setTimeout(() => {
@@ -178,7 +178,7 @@ export class FacturaVentaComponent {
           // this.resetForm();
 
           this.sweetalert2Service.swalwarning(
-            'La factura no se encuentra en el sistema'
+            'La Factura No Se Encuentra En El Sistema'
           );
           setTimeout(() => {
             window.location.reload();
