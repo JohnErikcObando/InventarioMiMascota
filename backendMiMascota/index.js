@@ -19,6 +19,7 @@ const whitelist = [
   'http://localhost:4200',
   'https://myapp.co',
   'https://mimascota.onrender.com',
+  'https://distribuidoramimascota.netlify.app/',
 ];
 const options = {
   origin: (origin, callback) => {
