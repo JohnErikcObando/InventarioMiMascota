@@ -1,12 +1,13 @@
-FROM mimascotaa:latest
-# Instalar Docker Compose
-RUN apt-get update && apt-get install -y docker-compose
+FROM node:14 AS mimascota
 
-# Copiar el archivo docker-compose.yml al contenedor
-COPY docker-compose.yml /app/docker-compose.yml
-
-# Definir el directorio de trabajo
 WORKDIR /app
 
-# Ejecutar docker-compose up al iniciar el contenedor
-CMD ["docker-compose", "up"]
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 3000
+
+CMD ["npm", "start"]
