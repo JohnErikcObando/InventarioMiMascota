@@ -21,6 +21,7 @@ if (process.env.NODE_ENV !== 'production') {
     .sync()
     .then(() => {
       console.log('Sincronización de modelos completa.');
+      console.log('BD', URI);
     })
     .catch((error) => {
       console.error('Error en la sincronización de modelos:', error);
