@@ -1,4 +1,4 @@
-FROM node:14 AS mimascota
+FROM node:18 AS mimascota
 
 WORKDIR /app
 
@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["npm","run", "start"]
