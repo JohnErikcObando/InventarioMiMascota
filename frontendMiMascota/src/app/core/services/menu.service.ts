@@ -13,6 +13,8 @@ export class MenuService {
   constructor(private http: HttpClient) {}
 
   getListaMenu() {
+    console.log('apiUrl', this.apiUrl);
+
     return this.http.get<MenuModel[]>(this.apiUrl).pipe(retry(3));
   }
 }
