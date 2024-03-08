@@ -1,44 +1,40 @@
+-- FUNCTION: public.t_actualiza_abono_factura_venta()
 
--- FUNCTION: public.t_actualizar_abono_factura_venta()
+-- DROP FUNCTION IF EXISTS public.t_actualiza_abono_factura_venta();
 
--- DROP FUNCTION IF EXISTS public.t_actualizar_abono_factura_venta();
-
-CREATE OR REPLACE FUNCTION public.t_actualizar_abono_factura_venta()
+CREATE OR REPLACE FUNCTION public.t_actualiza_abono_factura_venta()
     RETURNS trigger
     LANGUAGE 'plpgsql'
     COST 100
     VOLATILE NOT LEAKPROOF
 AS $BODY$
+DECLARE
+    num_pagos INTEGER;
 BEGIN
-    -- Verifica si el evento es una inserción en la tabla abonos_factura_venta
-    IF TG_OP = 'INSERT' THEN
-        -- Suma el nuevo valor del abono al valor actual de la factura
-        UPDATE factura_ventas
-        SET abono = factura_ventas.abono + NEW.valor
-        WHERE factura_ventas.id = NEW.factura_venta_id;
 
-    -- Verifica si el evento es una actualización en la tabla abonos_factura_venta
-    ELSIF TG_OP = 'UPDATE' THEN
-        -- Obtiene la diferencia entre el valor nuevo y el valor anterior del abono
-        -- Luego suma esta diferencia al valor actual de la factura
-        UPDATE factura_ventas
-        SET abono = factura_ventas.abono + (NEW.valor - OLD.valor)
-        WHERE factura_ventas.id = NEW.factura_venta_id;
-
-    -- Verifica si el evento es una eliminación en la tabla abonos_factura_venta
-    ELSIF TG_OP = 'DELETE' THEN
-        -- Resta el valor del abono eliminado al valor actual de la factura
-        UPDATE factura_ventas
-        SET abono = factura_ventas.abono - OLD.valor
-        WHERE factura_ventas.id = OLD.factura_venta_id;
+	num_pagos=0;
+	
+  IF TG_OP = 'INSERT'  THEN
+  	SELECT COUNT(id) INTO num_pagos FROM abonos_factura_venta WHERE factura_venta_id = NEW.factura_venta_id;
+    IF num_pagos > 1 THEN
+        UPDATE factura_ventas SET abono = abono + NEW.valor, saldo = total - (abono + NEW.valor) WHERE id = NEW.factura_venta_id;
     END IF;
+  ELSIF TG_OP = 'UPDATE' THEN
+  	IF (NEW.anulado=1) OR (OLD.anulado=0) THEN
+	 	UPDATE factura_ventas SET abono=abono - NEW.valor , saldo=(total-(abono-NEW.valor)) WHERE id = NEW.factura_venta_id;
+	ELSIF  (NEW.anulado=0) OR (OLD.anulado=1) THEN
+		UPDATE factura_ventas SET abono=abono + OLD.valor , saldo=(total-(abono+NEW.valor)) WHERE id = NEW.factura_venta_id;
+	END IF;
+  ELSIF TG_OP = 'DELETE' THEN
+    UPDATE factura_ventas SET abono=abono-OLD.valor , saldo=(total-(abono-OLD.valor)) WHERE id = NEW.factura_venta_id ;
+  END IF;
 
-    RETURN NEW;
+  RETURN NULL;
 END;
 $BODY$;
 
-ALTER FUNCTION public.t_actualizar_abono_factura_venta()
-    OWNER TO "MiMascota";
+ALTER FUNCTION public.t_actualiza_abono_factura_venta()
+    OWNER TO MiMascota;
 
 
 -- Trigger: t_actualizar_abono_factura_venta

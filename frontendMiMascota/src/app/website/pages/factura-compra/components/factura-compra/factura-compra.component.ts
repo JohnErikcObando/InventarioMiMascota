@@ -329,6 +329,57 @@ export class FacturaCompraComponent {
 
   // --------------------------------------------------------------------------------------
 
+  get cajaId() {
+    return this.form.get('cajaId');
+  }
+
+  get formaPagoId() {
+    return this.form.get('formaPagoId');
+  }
+
+  get fecha() {
+    return this.form.get('fecha');
+  }
+
+  get valor() {
+    return this.form.get('valor');
+  }
+
+  get descuento() {
+    return this.form.get('descuento');
+  }
+  get subtotal() {
+    return this.form.get('subtotal');
+  }
+
+  get total() {
+    return this.form.get('total');
+  }
+
+  get abono() {
+    return this.form.get('abono');
+  }
+
+  get saldo() {
+    return this.form.get('saldo');
+  }
+
+  get anulado() {
+    return this.form.get('anulado');
+  }
+
+  get descripcion() {
+    return this.form.get('descripcion');
+  }
+
+  get imagenUrl() {
+    return this.form.get('imagenUrl');
+  }
+
+  get usuarioModif() {
+    return this.form.get('usuarioModif');
+  }
+
   get idProveedor() {
     return this.form.get('proveedorFactura.id');
   }

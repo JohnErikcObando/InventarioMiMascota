@@ -13,21 +13,25 @@ DECLARE
 BEGIN
     -- Verificar si es una inserción
     IF TG_OP = 'INSERT' THEN
-        -- Insertar un nuevo registro en la tabla movimientos y capturar el ID devuelto
-        INSERT INTO movimientos (fecha, tipo, descripcion, valor, factura,usuario_modif)
-		VALUES (
-			NEW.fecha,
-			'Gasto',
-			'Factura ' || NEW.id,
-			NEW.valor,
-			NEW.id,  -- Reemplazar con el nombre correcto del campo
-			NEW.usuario_modif
-		)
-		RETURNING id INTO movimiento_id;
+        IF NEW.saldo=0 THEN
+		
+			-- Insertar un nuevo registro en la tabla movimientos y capturar el ID devuelto
+			INSERT INTO movimientos (fecha, tipo, descripcion, valor, factura,usuario_modif)
+			VALUES (
+				NEW.fecha,
+				'Gasto',
+				'Factura ' || NEW.id,
+				NEW.valor,
+				NEW.id,  -- Reemplazar con el nombre correcto del campo
+				NEW.usuario_modif
+			)
+			RETURNING id INTO movimiento_id;
 
-        -- Puedes hacer algo con el valor capturado, si es necesario
-        -- Por ejemplo, imprimirlo o utilizarlo de alguna manera
-        RAISE NOTICE 'Nuevo movimiento creado con ID: %', movimiento_id;
+			-- Puedes hacer algo con el valor capturado, si es necesario
+			-- Por ejemplo, imprimirlo o utilizarlo de alguna manera
+			RAISE NOTICE 'Nuevo movimiento creado con ID: %', movimiento_id;
+		
+		END IF;
     END IF;
 
     -- Debe devolver NULL al final de un trigger BEFORE INSERT

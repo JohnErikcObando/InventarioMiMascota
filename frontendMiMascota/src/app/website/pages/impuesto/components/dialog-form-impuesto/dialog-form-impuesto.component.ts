@@ -1,6 +1,8 @@
 import { Component, Inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+
 import { ImpuestoService } from 'src/app/core/services/impuesto.service';
 import { Sweetalert2Service } from 'src/app/shared/services/sweetalert2.service';
 import { MyValidators } from 'src/app/utils/my-validators';
@@ -22,7 +24,8 @@ export class DialogFormImpuestoComponent {
     public dialogRef: MatDialogRef<DialogFormImpuestoComponent>,
     @Inject(MAT_DIALOG_DATA) public idImpuesto: number,
     private impuestoService: ImpuestoService,
-    private sweetalert2Service: Sweetalert2Service
+    private sweetalert2Service: Sweetalert2Service,
+    private router: Router
   ) {
     this.form = new FormGroup({});
     this.buildForm();
@@ -59,9 +62,11 @@ export class DialogFormImpuestoComponent {
       );
       this.dialogRef.close();
       setTimeout(() => {
-        window.location.reload();
+        this.router.navigate(['/pages/impuesto']);
+        console.log('Creo un impuesto');
+
       }, 1500);
-    });
+    });1
   }
 
   get(idImpuesto: number) {

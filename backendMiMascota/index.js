@@ -10,7 +10,7 @@ const {
 } = require('./middlewares/error.handler');
 
 const app = express();
-const port = 8000;
+const port = 3000;
 
 app.use(express.json());
 
@@ -20,6 +20,8 @@ const whitelist = [
   'https://myapp.co',
   'https://mimascota.onrender.com',
   'https://distribuidoramimascota.netlify.app',
+  'https://johnerikcobando.github.io/mimascota/',
+  'file:///C:/Users/jeoba/OneDrive/Documentos/Proyectos/frontend-mi-mascota/index.html',
 ];
 const options = {
   origin: (origin, callback) => {

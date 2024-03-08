@@ -21,12 +21,13 @@
           [matDatepicker]="picker"
           [formControl]="date"
           formControlName="fecha"
-          [readonly]="readOnlyMode.value"
+          readonly
         />
         <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle
           matIconSuffix
           [for]="picker"
+          disabled
         ></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
         <mat-error *ngIf="form.get('fecha')?.hasError('required')"
@@ -324,9 +325,6 @@
                 formControlName="usuarioModif"
                 placeholder="Usuario Modif"
               />
-              <mat-error *ngIf="venta.get('cantidad')?.hasError('required')">
-                Campo requerido
-              </mat-error>
             </mat-form-field>
 
             <button
@@ -393,7 +391,12 @@
         <div>
           <mat-form-field class="full-width">
             <mat-label>Descuento</mat-label>
-            <input matInput formControlName="descuento" class="right-align" />
+            <input
+              matInput
+              formControlName="descuento"
+              (blur)="actualizarSumaTotal()"
+              class="right-align"
+            />
             <span matTextPrefix>$&nbsp;</span>
             <mat-error *ngIf="form.get('descuento')?.hasError('required')"
               >Campo requerido</mat-error
@@ -430,7 +433,12 @@
         <div>
           <mat-form-field class="full-width">
             <mat-label>Abono</mat-label>
-            <input matInput formControlName="abono" class="right-align" />
+            <input
+              matInput
+              formControlName="abono"
+              (blur)="editAbono()"
+              class="right-align"
+            />
             <span matTextPrefix>$&nbsp;</span>
             <mat-error *ngIf="form.get('abono')?.hasError('required')"
               >Campo requerido</mat-error
@@ -461,6 +469,7 @@
       color="primary"
       *ngIf="!busquedaExitosa"
       type="submit"
+      [disabled]="form.invalid || detalleVenta.length === 0"
     >
       Guardar
     </button>

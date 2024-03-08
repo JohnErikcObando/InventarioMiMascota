@@ -1,4 +1,5 @@
 import { Component, Inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ProveedorService } from 'src/app/core/services/proveedor.service';
@@ -25,7 +26,8 @@ export class DialogFromProveedorComponent {
     @Inject(MAT_DIALOG_DATA) public idProveedor: string,
     private proveedorService: ProveedorService,
     private sweetalert2Service: Sweetalert2Service,
-    private validatorsService: ValidatorsService
+    private validatorsService: ValidatorsService,
+    private router: Router
   ) {
     this.form = new FormGroup({});
     this.buildForm();
@@ -62,7 +64,8 @@ export class DialogFromProveedorComponent {
       );
       this.dialogRef.close();
       setTimeout(() => {
-        window.location.reload();
+        this.router.navigate(['/pages/proveedor']);
+        console.log('Ruta proveedor');
       }, 1500);
     });
   }

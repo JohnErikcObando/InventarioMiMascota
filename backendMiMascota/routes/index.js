@@ -22,12 +22,13 @@ const facturaVenta = require('./facturaVenta.router');
 const venta = require('./venta.router');
 const impuestoFactura = require('./impuestoFactura.router');
 const abonoFacturaRouter = require('./abonoFacturaVenta.router');
-
 const dashBoard = require('./dashBoard.router');
 
 function routerApi(app) {
+
   const router = express.Router();
-  app.use('/api/v1', router);
+
+  app.use('', router);
 
   router.use('/empresa', empresa);
   router.use('/movimiento', movimiento);
@@ -51,7 +52,6 @@ function routerApi(app) {
   router.use('/venta', venta);
   router.use('/impuestoFactura', impuestoFactura);
   router.use('/abonoFacturaVenta', abonoFacturaRouter);
-
   router.use('/dashBoard', dashBoard);
 }
 

@@ -397,6 +397,13 @@
 
   <!-- Botón para enviar el formulario principal -->
   <div style="margin-top: 10px">
-    <button mat-raised-button color="primary" type="submit">Guardar</button>
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="form.invalid || detalleCompra.length === 0"
+    >
+      Guardar
+    </button>
   </div>
 </form>
