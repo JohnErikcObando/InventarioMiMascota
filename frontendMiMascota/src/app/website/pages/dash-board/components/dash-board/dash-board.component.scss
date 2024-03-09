@@ -4,7 +4,7 @@
 
 .dashboard-card {
   position: absolute;
-  top: 15px;
+  top: 10px;
   left: 15px;
   right: 15px;
   bottom: 15px;
@@ -19,4 +19,14 @@
 
 .dashboard-card-content {
   text-align: center;
+}
+
+@media (max-width: 768px) {
+  /* Cuando el ancho de la pantalla es igual o menor a 768px */
+  .grid-container {
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(100%, 1fr)
+    ); /* Cada tarjeta ocupará el 100% del ancho disponible */
+  }
 }

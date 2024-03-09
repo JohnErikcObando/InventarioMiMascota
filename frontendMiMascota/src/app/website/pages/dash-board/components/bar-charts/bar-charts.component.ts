@@ -57,12 +57,12 @@ export class BarChartsComponent implements OnInit, OnDestroy {
           maintainAspectRatio: false,
           responsive: true,
 
-          scales: {
-            x: {
-              stacked: true,
+          plugins: {
+            legend: {
+              position: 'top',
             },
-            y: {
-              stacked: true,
+            title: {
+              display: true,
             },
           },
         },

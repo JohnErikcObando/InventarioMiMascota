@@ -1,0 +1,103 @@
+<form [formGroup]="form" (ngSubmit)="save($event)" class="mobile-form">
+  <div class="modal-container">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Movimiento</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content class="card-content-container">
+        <div class="form-row">
+          <mat-form-field class="half-width">
+            <mat-label>Fecha</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              [formControl]="date"
+              formControlName="fecha"
+              readonly
+            />
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle
+              matIconSuffix
+              [for]="picker"
+              disabled
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="form.get('fecha')?.hasError('required')"
+              >Campo requerido</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field class="half-width">
+            <mat-label>Tipo</mat-label>
+            <mat-select formControlName="tipo">
+              <mat-option value="Gasto">Gasto</mat-option>
+              <mat-option value="Venta">Venta</mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.get('tipo')?.hasError('required')"
+              >Campo requerido</mat-error
+            >
+          </mat-form-field>
+
+          <mat-form-field class="half-width">
+            <mat-label>Valor</mat-label>
+            <input
+              matInput
+              formControlName="valor"
+              type="number"
+              placeholder="0"
+              class="right-align"
+            />
+            <span matTextPrefix>$&nbsp;</span>
+            <mat-error *ngIf="form.get('valor')?.hasError('required')"
+              >Campo requerido</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field class="full-width">
+            <mat-label>Descripción</mat-label>
+            <textarea
+              matInput
+              [formControlName]="'descripcion'"
+              [value]="formControl['descripcion']?.value | ajustarTexto"
+            ></textarea>
+            <mat-error
+              *ngIf="
+                formControl['descripcion'] &&
+                formControl['descripcion'].hasError('maxlength')
+              "
+            >
+              Máximo 500 caracteres
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions class="button-container">
+        <button
+          class="button-row"
+          mat-stroked-button
+          type="button"
+          color="Basic"
+          (click)="cerrarDialog()"
+        >
+          Cerrar
+        </button>
+
+        <button
+          class="button-row"
+          mat-raised-button
+          type="submit"
+          [disabled]="form.invalid"
+          color="primary"
+        >
+          {{ botonAccion }}
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</form>

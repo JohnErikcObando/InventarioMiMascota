@@ -13,6 +13,7 @@ import { ClienteModule } from './cliente/cliente.module';
 import { ImpuestoModule } from './impuesto/impuesto.module';
 import { ProductoModule } from './producto/producto.module';
 import { FacturaCompraModule } from './factura-compra/factura-compra.module';
+import { MovimientoModule } from './movimiento/movimiento.module';
 
 const routes: Routes = [
   {
@@ -88,6 +89,13 @@ const routes: Routes = [
         loadChildren: () =>
           import('./factura-venta/factura-venta.module').then(
             (m) => FacturaVentaModule
+          ),
+      },
+      {
+        path: 'movimiento',
+        loadChildren: () =>
+          import('./movimiento/movimiento.module').then(
+            (m) => MovimientoModule
           ),
       },
     ],
