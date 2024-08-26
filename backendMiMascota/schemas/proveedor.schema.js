@@ -21,6 +21,7 @@ const CreateProveedorSchema = Joi.object({
 });
 
 const UpdateProveedorSchema = Joi.object({
+  id,
   nombre,
   telefono,
   celular,

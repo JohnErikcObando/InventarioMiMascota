@@ -54,6 +54,11 @@ const ProductoSchema = {
     type: DataTypes.FLOAT,
     defaultValue: 0,
   },
+  costo: {
+    allowNull: false,
+    type: DataTypes.FLOAT,
+    defaultValue: 0,
+  },
   fechaNow: {
     allowNull: false,
     type: DataTypes.DATE,

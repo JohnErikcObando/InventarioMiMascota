@@ -11,7 +11,9 @@ class CompraService {
   }
 
   async find() {
-    const compras = await models.Compra.findAll();
+    const compras = await models.Compra.findAll({
+      include: [{ model: models.Producto, as: 'producto' }],
+    });
     return compras;
   }
 

@@ -64,7 +64,23 @@ class FacturaCompraService {
   }
 
   async find() {
-    const facturasCompra = await models.FacturaCompra.findAll();
+    const facturasCompra = await models.FacturaCompra.findAll({
+      include: [
+        { model: models.Caja, as: 'caja' },
+        { model: models.Proveedor, as: 'proveedor' },
+        { model: models.FormaPago, as: 'forma_pago' },
+        {
+          model: models.Compra,
+          as: 'compra',
+          include: [
+            { model: models.Producto, as: 'producto' }, // Incluir el modelo Producto en Compra
+          ],
+        },
+      ],
+      order: [
+        ['fecha', 'DESC'], // Ordenar por el campo 'fecha' en orden descendente
+      ],
+    });
     return facturasCompra;
   }
 

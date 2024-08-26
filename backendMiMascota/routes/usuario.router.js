@@ -115,6 +115,24 @@ router.delete(
 );
 
 
+router.post('/login', async (req, res, next) => {
+  try {
+    const { usuario, password } = req.body;
+
+    if (!usuario || !password) {
+      return res
+        .status(400)
+        .json({ error: 'Username and password are required' });
+    }
+
+    const validatedUser = await service.validateUser(usuario, password);
+    res.status(200).json({ message: 'Login successful', user: validatedUser });
+  } catch (error) {
+    next(error);
+  }
+});
+
+
 
 // Middleware de manejo de errores
 router.use((err, req, res, next) => {

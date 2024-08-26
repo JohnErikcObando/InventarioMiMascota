@@ -24,8 +24,8 @@ class EmpresaService {
 
   async update(id, changes) {
     const empresa = await this.findOne(id);
-    const rta = await empresa.update(changes);
-    return rta;
+    const empresaActualizada = await empresa.update(changes);
+    return empresaActualizada;
   }
 
   async delete(id) {

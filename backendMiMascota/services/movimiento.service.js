@@ -11,7 +11,11 @@ class MovimientoService {
   }
 
   async find() {
-    const movimientos = await models.Movimiento.findAll();
+    const movimientos = await models.Movimiento.findAll({
+      order: [
+        ['fecha', 'DESC'], // Ordenar por el campo 'ingreso' en orden descendente
+      ],
+    });
     return movimientos;
   }
 

@@ -64,7 +64,18 @@ class FacturaVentaService {
   }
 
   async find() {
-    const facturasVenta = await models.FacturaVenta.findAll();
+    const facturasVenta = await models.FacturaVenta.findAll({
+      include: [
+        { model: models.Caja, as: 'caja' },
+        { model: models.Cliente, as: 'cliente' },
+        { model: models.Venta, as: 'detalleVenta' },
+        { model: models.AbonoFacturaVenta, as: 'abonoFacturaCV' },
+        { model: models.FormaPago, as: 'forma_pago' },
+      ],
+      order: [
+        ['fecha', 'DESC'], // Ordenar por el campo 'ingreso' en orden descendente
+      ],
+    });
     return facturasVenta;
   }
 

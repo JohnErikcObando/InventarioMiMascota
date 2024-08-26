@@ -56,6 +56,29 @@ class UsuarioService {
 
     return usuarios;
   }
+
+  // Método para validar usuario y contraseña
+  async validateUser(username, password) {
+    const trimUsername = username.trim();
+    const usuario = await models.Usuario.findOne({
+      where: {
+        usuario: {
+          [Sequelize.Op.iLike]: trimUsername,
+        },
+      },
+      include: [{ model: models.RolUsuario, as: 'rol_usuario' }],
+    });
+
+    if (!usuario) {
+      throw boom.notFound('Usuario not found');
+    }
+
+    if (usuario.password !== password) {
+      throw boom.unauthorized('Invalid password');
+    }
+
+    return usuario;
+  }
 }
 
 module.exports = UsuarioService;

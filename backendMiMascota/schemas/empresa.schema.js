@@ -21,6 +21,7 @@ const CreateEmpresaSchema = Joi.object({
 });
 
 const UpdateEmpresaSchema = Joi.object({
+  id,
   nombre,
   direccion,
   telefono,

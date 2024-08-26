@@ -11,8 +11,13 @@ class InventarioService {
   }
 
   async find() {
-    const inventarios = await models.Inventario.findAll();
-    return inventarios;
+    const inventario = await models.Producto.findAll({
+      include: [{ model: models.Inventario, as: 'inventario' }],
+      order: [
+        ['nombre', 'ASC'], // Orden ascendente por el campo 'nombre'
+      ],
+    });
+    return inventario;
   }
 
   async findOne(id) {

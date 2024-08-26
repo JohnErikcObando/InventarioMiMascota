@@ -7,6 +7,7 @@ const nombre = Joi.string().required();
 const codigo = Joi.string().allow('').optional();
 const descripcion = Joi.string().allow('').optional();
 const valor = Joi.number().integer().required();
+const costo = Joi.number().integer().required();
 const imagenUrl = Joi.string().allow('').optional();
 const usuarioModif = Joi.string().required();
 
@@ -17,6 +18,7 @@ const CreateProductoSchema = Joi.object({
   codigo,
   descripcion,
   valor,
+  costo,
   imagenUrl,
   usuarioModif,
 });
@@ -28,6 +30,7 @@ const UpdateProductoSchema = Joi.object({
   codigo,
   descripcion,
   valor,
+  costo,
   imagenUrl,
   usuarioModif,
 });
