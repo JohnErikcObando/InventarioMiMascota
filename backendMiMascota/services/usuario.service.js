@@ -1,4 +1,5 @@
 const boom = require('@hapi/boom');
+const bcrypt = require('bcrypt');
 
 const { models } = require('./../libs/sequelize');
 const { Sequelize } = require('sequelize');
@@ -7,13 +8,22 @@ class UsuarioService {
   constructor() {}
 
   async create(data) {
-    const nuevoUsuario = await models.Usuario.create(data);
+    const hash = await bcrypt.hash(data.password, 10);
+
+    const nuevoUsuario = await models.Usuario.create({
+      ...data,
+      password: hash,
+    });
+    delete nuevoUsuario.dataValues.password;
     return nuevoUsuario;
   }
 
   async find() {
     const usuarios = await models.Usuario.findAll({
       // include: [{ model: models.RolUsuario, as: 'rol_usuario' }],
+      order: [
+        ['nombre', 'ASC'], // Orden ascendente por el campo 'nombre'
+      ],
     });
     return usuarios;
   }
@@ -30,7 +40,19 @@ class UsuarioService {
 
   async update(id, changes) {
     const usuario = await this.findOne(id);
+
+    // Si el campo "password" está en los cambios, hashear la contraseña
+    if (changes.password) {
+      const hash = await bcrypt.hash(changes.password, 10);
+      changes.password = hash; // Reemplaza la contraseña con el hash
+    }
+
+    // Actualizar los demás campos
     const usuarioActualizado = await usuario.update(changes);
+
+    // Eliminar el campo password del resultado
+    delete usuarioActualizado.dataValues.password;
+
     return usuarioActualizado;
   }
 
@@ -42,12 +64,18 @@ class UsuarioService {
 
   async findByUsername(username) {
     const trimUsuario = username.trim();
-    const usuarios = await models.Usuario.findAll({
+    const usuarios = await models.Usuario.findOne({
       where: {
         usuario: {
           [Sequelize.Op.iLike]: trimUsuario,
         },
       },
+      include: [
+        {
+          model: models.RolUsuario,
+          as: 'rol_usuario',
+        },
+      ],
     });
 
     if (!usuarios || usuarios.length === 0) {

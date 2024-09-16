@@ -12,7 +12,11 @@ class ClienteService {
   }
 
   async find() {
-    const clientes = await models.Cliente.findAll();
+    const clientes = await models.Cliente.findAll({
+      order: [
+        ['nombre', 'ASC'], // Orden ascendente por el campo 'nombre'
+      ],
+    });
     return clientes;
   }
 

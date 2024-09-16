@@ -24,8 +24,9 @@ const impuestoFactura = require('./impuestoFactura.router');
 const abonoFacturaRouter = require('./abonoFacturaVenta.router');
 const dashBoard = require('./dashBoard.router');
 
-function routerApi(app) {
+const authRouter = require('./auth.router');
 
+function routerApi(app) {
   const router = express.Router();
 
   app.use('', router);
@@ -53,6 +54,7 @@ function routerApi(app) {
   router.use('/impuestoFactura', impuestoFactura);
   router.use('/abonoFacturaVenta', abonoFacturaRouter);
   router.use('/dashBoard', dashBoard);
+  router.use('/auth', authRouter);
 }
 
 module.exports = routerApi;

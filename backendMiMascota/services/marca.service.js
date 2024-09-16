@@ -12,7 +12,11 @@ class MarcaService {
   }
 
   async find() {
-    const marcas = await models.Marca.findAll();
+    const marcas = await models.Marca.findAll({
+      order: [
+        ['nombre', 'ASC'], // Orden ascendente por el campo 'nombre'
+      ],
+    });
     return marcas;
   }
 

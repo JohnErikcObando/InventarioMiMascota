@@ -13,6 +13,9 @@ class CompraService {
   async find() {
     const compras = await models.Compra.findAll({
       include: [{ model: models.Producto, as: 'producto' }],
+      order: [
+        ['nombre', 'ASC'], // Orden ascendente por el campo 'nombre'
+      ],
     });
     return compras;
   }

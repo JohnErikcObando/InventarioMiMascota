@@ -12,7 +12,11 @@ class ImpuestoService {
   }
 
   async find() {
-    const facturasCompra = await models.Impuesto.findAll();
+    const facturasCompra = await models.Impuesto.findAll({
+      order: [
+        ['nombre', 'ASC'], // Orden ascendente por el campo 'nombre'
+      ],
+    });
     return facturasCompra;
   }
 

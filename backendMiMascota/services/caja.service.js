@@ -12,7 +12,11 @@ class CajaService {
   }
 
   async find() {
-    const cajas = await models.Caja.findAll();
+    const cajas = await models.Caja.findAll({
+      order: [
+        ['nombre', 'ASC'], // Orden ascendente por el campo 'nombre'
+      ],
+    });
     return cajas;
   }
 

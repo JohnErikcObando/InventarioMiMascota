@@ -23,7 +23,11 @@ class CategoriaService {
   }
 
   async find() {
-    const categorias = await models.Categoria.findAll();
+    const categorias = await models.Categoria.findAll({
+      order: [
+        ['nombre', 'ASC'], // Orden ascendente por el campo 'nombre'
+      ],
+    });
     return categorias;
   }
 
@@ -72,6 +76,10 @@ class CategoriaService {
     await categoria.destroy();
     return { id };
   }
+
+
+
+
 }
 
 module.exports = CategoriaService;

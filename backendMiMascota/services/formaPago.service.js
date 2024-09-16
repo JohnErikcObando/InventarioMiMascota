@@ -12,7 +12,11 @@ class FormaPagoService {
   }
 
   async find() {
-    const formasPago = await models.FormaPago.findAll();
+    const formasPago = await models.FormaPago.findAll({
+      order: [
+        ['nombre', 'ASC'], // Orden ascendente por el campo 'nombre'
+      ],
+    });
     return formasPago;
   }
 

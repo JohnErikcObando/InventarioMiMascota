@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const routerApi = require('./routes');
+const { checkApiKey } = require('./middlewares/auth.handler');
+const passport = require('passport');
 
 const {
   logErrors,
@@ -35,8 +37,15 @@ const options = {
 
 app.use(cors(options));
 
+// Inicializar Passport
+require('./utils/auth'); // Requiere la estrategia local
+
 app.get('/', (req, res) => {
   res.send('Hola mi server en express');
+});
+
+app.get('/nueva-ruta', checkApiKey, (req, res) => {
+  res.send('Hola soy una nueva ruta');
 });
 
 routerApi(app);

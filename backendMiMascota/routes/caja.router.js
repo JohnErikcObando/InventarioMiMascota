@@ -1,6 +1,8 @@
 const express = require('express');
 const CajaService = require('../services/caja.service');
 const validatorHandler = require('../middlewares/validator.handler');
+// const { checkAdminRole } = require('../middlewares/auth.handler');
+const { checkRoles } = require('../middlewares/auth.handler');
 const {
   CreateCajaSchema,
   UpdateCajaSchema,
@@ -8,18 +10,24 @@ const {
   UpdateCajaModifSchema,
 } = require('../schemas/caja.schema');
 const boom = require('@hapi/boom');
+const passport = require('passport');
 
 const router = express.Router();
 const service = new CajaService();
 
-router.get('/', async (req, res, next) => {
-  try {
-    const cajas = await service.find();
-    res.json(cajas);
-  } catch (error) {
-    next(error);
-  }
-});
+router.get(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  checkRoles('admin'),
+  async (req, res, next) => {
+    try {
+      const cajas = await service.find();
+      res.json(cajas);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 router.get('/byCaja', async (req, res, next) => {
   try {
@@ -40,6 +48,8 @@ router.get('/byCaja', async (req, res, next) => {
 
 router.get(
   '/:id',
+  passport.authenticate('jwt', { session: false }),
+  checkRoles('admin'),
   validatorHandler(GetCajaSchema, 'params'),
   async (req, res, next) => {
     try {
@@ -54,6 +64,8 @@ router.get(
 
 router.post(
   '/',
+  passport.authenticate('jwt', { session: false }),
+  checkRoles('admin'),
   validatorHandler(CreateCajaSchema, 'body'),
   async (req, res, next) => {
     try {
@@ -90,6 +102,8 @@ router.patch(
     try {
       const { id } = req.params;
       const body = req.body;
+      console.log('body', body);
+
       const usuario = await service.update(id, body);
       res.json(usuario);
     } catch (error) {
