@@ -20,6 +20,22 @@ class DashboardService {
     }
   }
 
+  async obtenerCategoriaMes() {
+    try {
+      const result = await sequelize.query(
+        'SELECT * FROM ventas_por_categoria_por_mes()',
+        {
+          type: QueryTypes.SELECT,
+        },
+      );
+
+      return result;
+    } catch (error) {
+      console.error('Error al obtener movimientos tipo mes:', error.message);
+      throw error;
+    }
+  }
+
   async obtenerProductosMasVendidosPorMes() {
     try {
       const result = await sequelize.query(

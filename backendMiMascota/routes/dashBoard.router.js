@@ -13,6 +13,15 @@ router.get('/movimientos-tipo-mes', async (req, res, next) => {
   }
 });
 
+router.get('/categoria-mes', async (req, res, next) => {
+  try {
+    const movimientos = await service.obtenerCategoriaMes();
+    res.json(movimientos);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get('/productos-mas-vendidos-por-mes', async (req, res, next) => {
   try {
     const productosMasVendidos =

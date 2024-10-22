@@ -4,6 +4,7 @@ const { models } = require('./../libs/sequelize');
 
 const CajaService = require('./caja.service');
 const clienteService = require('./cliente.service');
+const { Op } = require('sequelize');
 
 class FacturaVentaService {
   constructor() {
@@ -63,8 +64,20 @@ class FacturaVentaService {
     }
   }
 
-  async find() {
+  async find(fechaInicio, fechaFin) {
+    const where = {};
+
+    // Verificar si se proporcionan fechas para el filtro
+    if (fechaInicio && fechaFin) {
+      where.fecha = {
+        [Op.between]: [fechaInicio, fechaFin],
+      };
+    }
+
+    console.log(where);
+
     const facturasVenta = await models.FacturaVenta.findAll({
+      where, // Aplicar el filtro de rango de fechas
       include: [
         { model: models.Caja, as: 'caja' },
         { model: models.Cliente, as: 'cliente' },
@@ -73,9 +86,10 @@ class FacturaVentaService {
         { model: models.FormaPago, as: 'forma_pago' },
       ],
       order: [
-        ['fecha', 'DESC'], // Ordenar por el campo 'ingreso' en orden descendente
+        ['fecha', 'DESC'], // Ordenar por el campo 'fecha' en orden descendente
       ],
     });
+
     return facturasVenta;
   }
 

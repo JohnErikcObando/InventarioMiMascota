@@ -13,7 +13,11 @@ const service = new FacturaCompraService();
 
 router.get('/', async (req, res, next) => {
   try {
-    const facturasCompra = await service.find();
+    // Obtener las fechas desde los query params
+    const { fechaInicio, fechaFin } = req.query;
+    console.log('fechaInicio', fechaInicio, 'fechaFin', fechaFin);
+
+    const facturasCompra = await service.find(fechaInicio, fechaFin);
     res.json(facturasCompra);
   } catch (error) {
     next(error);

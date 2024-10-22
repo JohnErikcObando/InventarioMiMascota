@@ -3,6 +3,7 @@ const boom = require('@hapi/boom');
 const { models } = require('./../libs/sequelize');
 const CajaService = require('./caja.service');
 const ProveedorService = require('./proveedor.service');
+const { Op } = require('sequelize');
 
 class FacturaCompraService {
   constructor() {
@@ -63,8 +64,18 @@ class FacturaCompraService {
     }
   }
 
-  async find() {
+  async find(fechaInicio, fechaFin) {
+    const where = {};
+
+    // Verificar si se proporcionan fechas para el filtro
+    if (fechaInicio && fechaFin) {
+      where.fecha = {
+        [Op.between]: [fechaInicio, fechaFin],
+      };
+    }
+
     const facturasCompra = await models.FacturaCompra.findAll({
+      where,
       include: [
         { model: models.Caja, as: 'caja' },
         { model: models.Proveedor, as: 'proveedor' },
@@ -72,15 +83,12 @@ class FacturaCompraService {
         {
           model: models.Compra,
           as: 'compra',
-          include: [
-            { model: models.Producto, as: 'producto' }, // Incluir el modelo Producto en Compra
-          ],
+          include: [{ model: models.Producto, as: 'producto' }],
         },
       ],
-      order: [
-        ['fecha', 'DESC'], // Ordenar por el campo 'fecha' en orden descendente
-      ],
+      order: [['fecha', 'DESC']],
     });
+
     return facturasCompra;
   }
 
