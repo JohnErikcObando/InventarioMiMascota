@@ -1,6 +1,7 @@
 const boom = require('@hapi/boom');
 
 const { models } = require('./../libs/sequelize');
+const { Op } = require('sequelize');
 
 class MovimientoService {
   constructor() {}
@@ -10,8 +11,24 @@ class MovimientoService {
     return nuevoMovimiento;
   }
 
-  async find() {
+  async find(fechaInicio, fechaFin) {
+    const where = {};
+
+    // Verificar si se proporcionan fechas para el filtro
+    if (fechaInicio && fechaFin) {
+      const startDate = new Date(fechaInicio);
+      const endDate = new Date(fechaFin);
+      endDate.setDate(endDate.getDate() + 1); // Agrega un día a la fecha final
+
+      where.fecha = {
+        [Op.gte]: startDate,
+        [Op.lt]: endDate,
+      };
+    }
+    console.log(where);
+
     const movimientos = await models.Movimiento.findAll({
+      where,
       order: [
         ['fecha', 'DESC'], // Ordenar por el campo 'ingreso' en orden descendente
       ],

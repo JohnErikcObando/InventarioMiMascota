@@ -14,7 +14,10 @@ const service = new MovimientoService();
 
 router.get('/', async (req, res, next) => {
   try {
-    const movimientos = await service.find();
+    // Obtener las fechas desde los query params
+    const { fechaInicio, fechaFin } = req.query;
+    console.log('fechaInicio', fechaInicio, 'fechaFin', fechaFin);
+    const movimientos = await service.find(fechaInicio, fechaFin);
     res.json(movimientos);
   } catch (error) {
     next(error);

@@ -69,8 +69,13 @@ class FacturaCompraService {
 
     // Verificar si se proporcionan fechas para el filtro
     if (fechaInicio && fechaFin) {
+      const startDate = new Date(fechaInicio);
+      const endDate = new Date(fechaFin);
+      endDate.setDate(endDate.getDate() + 1); // Agrega un día a la fecha final
+
       where.fecha = {
-        [Op.between]: [fechaInicio, fechaFin],
+        [Op.gte]: startDate,
+        [Op.lt]: endDate,
       };
     }
 
