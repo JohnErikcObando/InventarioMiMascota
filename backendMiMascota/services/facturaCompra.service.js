@@ -55,8 +55,6 @@ class FacturaCompraService {
         }),
       );
 
-      await this.cajaService.actualizarNumeroFactura(cajaId);
-
       return nuevaFacturaCompra;
     } catch (error) {
       console.error('Error al crear la factura de venta:', error.message);

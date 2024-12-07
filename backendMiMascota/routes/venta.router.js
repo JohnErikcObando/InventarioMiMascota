@@ -12,6 +12,7 @@ const {
 const router = express.Router();
 const service = new VentaService();
 
+// Obtener todas las ventas
 router.get('/', async (req, res, next) => {
   try {
     const ventas = await service.find();
@@ -21,6 +22,28 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+// Obtener ventas por facturaVentaId
+router.get('/byFactura', async (req, res, next) => {
+
+  console.log('ingreso');
+
+  try {
+    const { facturaVentaId } = req.query;
+
+    if (!facturaVentaId) {
+      return res
+        .status(400)
+        .json({ error: 'Parámetro de consulta "Factura" requerido' });
+    }
+
+    const venta = await service.findByVenta(facturaVentaId);
+    res.json(venta);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Obtener una venta por ID
 router.get(
   '/:id',
   validatorHandler(GetVentaSchema, 'params'),
@@ -35,6 +58,7 @@ router.get(
   },
 );
 
+// Crear una nueva venta
 router.post(
   '/',
   validatorHandler(CreateVentaSchema, 'body'),
@@ -49,6 +73,7 @@ router.post(
   },
 );
 
+// Actualizar una venta
 router.put(
   '/:id',
   validatorHandler(GetVentaSchema, 'params'),
@@ -65,6 +90,7 @@ router.put(
   },
 );
 
+// Eliminar una venta
 router.delete(
   '/:id',
   validatorHandler(GetVentaSchema, 'params'),
@@ -84,12 +110,10 @@ router.use((err, req, res, next) => {
   console.error(err);
 
   if (!err.isBoom) {
-    // Si el error no es de tipo Boom, crea un Boom error interno
     err = boom.internal(err.message || 'Internal Server Error');
   }
 
   res.status(err.output.statusCode).json(err.output.payload);
-  next(); // Pasa el control al siguiente middleware
 });
 
 module.exports = router;

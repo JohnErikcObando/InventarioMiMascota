@@ -15,15 +15,10 @@ class FacturaVentaService {
   async create(data) {
     const clienteFactura = data.clienteFactura || {};
 
-    //Verificacion si el cliente existe
+    // Verificación si el cliente existe
     let clienteExistente = null;
-    try {
-      if (clienteFactura.id) {
-        clienteExistente = await this.clienteService.findOne(clienteFactura.id);
-      }
-    } catch (error) {
-      // El cliente no se encontró, y se capturó la excepción
-      clienteExistente = null;
+    if (clienteFactura.id) {
+      clienteExistente = await this.clienteService.findOne(clienteFactura.id);
     }
 
     if (!clienteExistente) {
@@ -31,37 +26,29 @@ class FacturaVentaService {
       clienteExistente = await this.clienteService.create(clienteFactura);
     }
 
-    // Verificar la caja que tiene asignada la factura
-    try {
-      const cajaId = data.cajaId;
-      // Obtener la caja actual y actualizar el número de factura
-      const factura = await this.cajaService.obtenerCajaActual(cajaId);
+    // Verificar la caja y obtener el número de factura
+    const cajaId = data.cajaId;
+    const factura = await this.cajaService.obtenerCajaActual(cajaId);
 
-      // Crear la factura de venta con el ID adecuado
-      const nuevaFacturaVenta = await models.FacturaVenta.create({
-        ...data,
-        id: factura,
-        clienteId: clienteExistente.id,
-      });
+    // Crear la factura de venta
+    const nuevaFacturaVenta = await models.FacturaVenta.create({
+      ...data,
+      id: factura,
+      clienteId: clienteExistente.id,
+    });
 
-      // Asociar los detalles de venta con la factura
-      const detalleVentaData = data.detalleVenta || [];
-      await Promise.all(
-        detalleVentaData.map(async (detalleVenta) => {
-          await models.Venta.create({
-            ...detalleVenta,
-            facturaVentaId: nuevaFacturaVenta.id,
-          });
-        }),
-      );
+    // Asociar los detalles de venta con la factura
+    const detalleVentaData = data.detalleVenta || [];
+    await Promise.all(
+      detalleVentaData.map(async (detalleVenta) => {
+        await models.Venta.create({
+          ...detalleVenta,
+          facturaVentaId: nuevaFacturaVenta.id,
+        });
+      }),
+    );
 
-      await this.cajaService.actualizarNumeroFactura(cajaId);
-
-      return nuevaFacturaVenta;
-    } catch (error) {
-      console.error('Error al crear la factura de venta:', error.message);
-      throw error;
-    }
+    return nuevaFacturaVenta;
   }
 
   async find(fechaInicio, fechaFin) {

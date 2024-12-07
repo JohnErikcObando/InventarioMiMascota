@@ -22,10 +22,7 @@ class VentaService {
 
   async findOne(id) {
     const venta = await models.Venta.findByPk(id, {
-      include: [
-        { model: models.FacturaVenta, as: 'factura_venta' },
-        { model: models.Producto, as: 'producto' },
-      ],
+      include: [{ model: models.Producto, as: 'producto' }],
     });
     if (!venta) {
       throw boom.notFound('Venta not found');
@@ -33,16 +30,19 @@ class VentaService {
     return venta;
   }
 
-  async update(id, changes) {
-    const venta = await this.findOne(id);
-    const ventaActualizada = await venta.update(changes);
-    return ventaActualizada;
-  }
+  async findByVenta(facturaVentaId) {
+    const where = {};
 
-  async delete(id) {
-    const venta = await this.findOne(id);
-    await venta.destroy();
-    return { id };
+    // Verificar si se proporciona facturaVentaId para el filtro
+    if (facturaVentaId) {
+      where.facturaVentaId = facturaVentaId;
+    }
+
+    const ventas = await models.Venta.findAll({
+      where, // Aplicar el filtro aquí
+      include: [{ model: models.Producto, as: 'producto' }],
+    });
+    return ventas;
   }
 }
 

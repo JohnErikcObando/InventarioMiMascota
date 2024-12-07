@@ -72,26 +72,6 @@ class CajaService {
       throw error;
     }
   }
-
-  async actualizarNumeroFactura(cajaId) {
-    try {
-      // Obtener la caja actual
-      const caja = await this.findOne(cajaId);
-
-      // Incrementar el número de factura
-      const nuevoNumeroFactura = caja.numFactura + 1;
-
-      // Actualizar el número de factura en la base de datos
-      await this.update(cajaId, { numFactura: nuevoNumeroFactura });
-    } catch (error) {
-      // Manejo de errores específico para la actualización del número de factura
-      console.error(
-        'Error al actualizar el número de factura en la caja:',
-        error.message,
-      );
-      throw error;
-    }
-  }
 }
 
 module.exports = CajaService;
