@@ -48,7 +48,7 @@ class FacturaVentaService {
       }),
     );
 
-    return nuevaFacturaVenta;
+    return this.findOne(nuevaFacturaVenta.id);
   }
 
   async find(fechaInicio, fechaFin) {
@@ -73,12 +73,19 @@ class FacturaVentaService {
       include: [
         { model: models.Caja, as: 'caja' },
         { model: models.Cliente, as: 'cliente' },
-        { model: models.Venta, as: 'detalleVenta' },
+        {
+          model: models.Venta,
+          as: 'detalleVenta',
+          include: [
+            // Relación anidada
+            { model: models.Producto, as: 'producto' }, // Ajusta el alias según tu modelo
+          ],
+        },
         { model: models.AbonoFacturaVenta, as: 'abonoFacturaCV' },
         { model: models.FormaPago, as: 'forma_pago' },
       ],
       order: [
-        ['fecha', 'DESC'], // Ordenar por el campo 'fecha' en orden descendente
+        ['id', 'DESC'], // Ordenar por el campo 'fecha' en orden descendente
       ],
     });
 
@@ -89,8 +96,19 @@ class FacturaVentaService {
     const facturaVenta = await models.FacturaVenta.findByPk(id, {
       include: [
         { model: models.Caja, as: 'caja' },
+        { model: models.FormaPago, as: 'forma_pago' },
         { model: models.Cliente, as: 'cliente' },
-        { model: models.Venta, as: 'detalleVenta' },
+        {
+          model: models.Venta,
+          as: 'detalleVenta',
+          include: [
+            {
+              model: models.Producto,
+              as: 'producto',
+              attributes: ['id', 'nombre'],
+            },
+          ],
+        },
         { model: models.AbonoFacturaVenta, as: 'abonoFacturaCV' },
       ],
     });

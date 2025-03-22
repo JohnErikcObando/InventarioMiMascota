@@ -55,6 +55,9 @@
         <mat-error *ngIf="email && email.hasError('required')">
           El email is <strong>required</strong>
         </mat-error>
+        <mat-error *ngIf="email && email.hasError('pattern')">
+          El email is <strong>required</strong>
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="fill">

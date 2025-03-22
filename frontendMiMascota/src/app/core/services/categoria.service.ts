@@ -65,7 +65,7 @@ export class CategoriaService {
 
   findByCategoria(nombre: string) {
     return this.http
-      .get<CategoriaModel>(`${this.apiUrl}/byCategoria`, {
+      .get<CategoriaModel>(`${this.apiUrl}/byCaja`, {
         params: { nombre: nombre },
       })
       .pipe(

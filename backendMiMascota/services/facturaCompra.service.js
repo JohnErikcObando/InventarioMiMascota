@@ -89,7 +89,7 @@ class FacturaCompraService {
           include: [{ model: models.Producto, as: 'producto' }],
         },
       ],
-      order: [['fecha', 'DESC']],
+      order: [['id', 'DESC']],
     });
 
     return facturasCompra;

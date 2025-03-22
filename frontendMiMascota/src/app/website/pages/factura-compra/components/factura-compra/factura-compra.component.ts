@@ -413,3 +413,4 @@ export class FacturaCompraComponent {
     return this.form.get('nombreProducto');
   }
 }
+
