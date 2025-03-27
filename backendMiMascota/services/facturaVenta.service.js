@@ -51,8 +51,17 @@ class FacturaVentaService {
     return this.findOne(nuevaFacturaVenta.id);
   }
 
-  async find(fechaInicio, fechaFin) {
+  async find(fechaInicio, fechaFin, filtrarSaldo) {
     const where = {};
+
+    // Asegurar que filtrarSaldo sea un booleano real
+    const saldoFiltro = filtrarSaldo === 'true';
+
+    if (saldoFiltro) {
+      where.saldo = {
+          [Op.gt]: 0,
+      };
+  }
 
     // Verificar si se proporcionan fechas para el filtro
     if (fechaInicio && fechaFin) {
